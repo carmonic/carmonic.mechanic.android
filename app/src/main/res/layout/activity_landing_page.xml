@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"/>
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/coordinatorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/mainbgimg"
+            tools:context=".LandingPageActivity">
+
+
+
+        <!--  <android.support.v7.widget.AppCompatImageView
+              android:id="@+id/appCompatImageView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:src="@drawable/mainbgimg"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent" />  -->
+
+        <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="110dp"
+                android:contentDescription="@null"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/dr_gears" />
+
+        <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginStart="60dp"
+                android:contentDescription="@null"
+                android:layout_marginTop="120dp"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/dr_gears" />
+
+        <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="140dp"
+                android:contentDescription="@null"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/dr_gears" />
+
+        <TextView
+                android:layout_width="238dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="132dp"
+                android:layout_marginEnd="30dp"
+                android:fontFamily="@fonts/product_sans_bold"
+                android:text="@string/carmonic"
+                android:textColor="@color/colorBlueHeader"
+                android:textSize="38dp"
+                android:textStyle="bold"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+                android:id="@+id/btn_register"
+                style="@style/home_page_button"
+                android:layout_width="120dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginBottom="48dp"
+                android:background="@drawable/register_button"
+                android:onClick="onclick_Register"
+                android:text="@string/Register"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+                android:id="@+id/btn_sign_in"
+                style="@style/home_page_button"
+                android:layout_width="120dp"
+                android:layout_height="37dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="48dp"
+                android:background="@drawable/register_button"
+                android:onClick="onclick_SignIn"
+                android:text="@string/SignIn"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
