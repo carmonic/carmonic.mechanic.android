@@ -1,33 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".onboarding.SignInActivtiy">
+    android:background="@drawable/grad_hom"
+    tools:context=".onboarding.SignInActivtiy"
+    >
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/appCompatImageButton"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/back_arrow_yellow"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/txtVwScreen2Hdr"
+        android:layout_width="184dp"
+        android:layout_height="83dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="104dp"
+        android:fontFamily="@fonts/GlacialIndifferenceBold"
+        android:lineSpacingExtra="16sp"
+
+        android:text="Hello! \nWelcome Back."
+        android:textColor="#EDD170"
+        android:textSize="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtVwScreen2SubTitle"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="212dp"
+        android:fontFamily="@fonts/GlacialIndifferenceRegular"
+        android:text="Sign into your account"
+        android:textColor="#B9B9B9"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtinputLayEmail"
+        android:layout_width="269dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="312dp"
+        android:orientation="horizontal"
+        android:paddingBottom="1dp"
+        app:hintTextAppearance="@style/txtLabel"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtEditPwd"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress"
+            android:theme="@style/textEditStyle" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_sign_in_activtiy" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtinputLayPwd2"
+        android:layout_width="269dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="385dp"
+        android:orientation="horizontal"
+        android:paddingBottom="1dp"
+        app:hintTextAppearance="@style/txtLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtEditPwd2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:theme="@style/textEditStyle" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/txtVwForgotPassword"
+        android:layout_width="186dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="102dp"
+        android:layout_marginTop="445dp"
+
+        android:text="Forgot your password?"
+        android:textAlignment="center"
+        android:textColor="#3396BD"
+
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_sign_in"
+        style="@style/home_page_button"
+        android:layout_width="99dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/register_button"
+
+        android:text="@string/Submit"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

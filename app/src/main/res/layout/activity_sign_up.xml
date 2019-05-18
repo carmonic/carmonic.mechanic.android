@@ -7,16 +7,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/grad_hom"
-    tools:context=".sign_upActivity"
-
 
     >
     <!--  android:background="@drawable/scrn1bgx1"       android:background="#003D73"-->
 
-    <!--  <include layout="@layout/content_sign_up" />-->
+    <!-- -->
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/appCompatImageButton"
+        android:id="@+id/backbutton"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginStart="21dp"
@@ -27,129 +25,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/txtVwScreen2Hdr"
-        android:layout_width="267dp"
-        android:layout_height="83dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="104dp"
-        android:fontFamily="@fonts/GlacialIndifferenceBold"
-        android:lineSpacingExtra="14sp"
-        android:text="Hello!  \nWelcome to Carmonic"
-        android:textColor="#EDD170"
-        android:textSize="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:id="@+id/infoPanel">
 
-    <TextView
-        android:id="@+id/txtVwScreen2SubTitle"
-        android:layout_width="267dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="213dp"
+        <include layout="@layout/content_sign_up" />
 
-        android:fontFamily="@fonts/GlacialIndifferenceRegular"
-        android:text="Create your account"
-
-        android:textColor="#B9B9B9"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:id="@+id/passwordPanel">
 
+        <include layout="@layout/content_sign_password" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtinputLayName"
-        android:layout_width="269dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="264dp"
-        android:orientation="horizontal"
-        android:paddingBottom="1dp"
-        app:hintTextAppearance="@style/txtLabel"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtEditName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="First Name"
-            android:inputType="textPersonName"
-            android:theme="@style/textEditStyle" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtinputLayLastName"
-        android:layout_width="269dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="340dp"
-        android:orientation="horizontal"
-        android:paddingBottom="1dp"
-        app:hintTextAppearance="@style/txtLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtEditLastName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Last Name"
-            android:inputType="textPersonName"
-            android:theme="@style/textEditStyle" />
-
-   </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtinputLayEmail"
-        android:layout_width="269dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="416dp"
-        android:orientation="horizontal"
-
-        android:paddingBottom="1dp"
-        app:hintTextAppearance="@style/txtLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtEditEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email Address"
-            android:inputType="textEmailAddress"
-            android:theme="@style/textEditStyle" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtinputLayPhone"
-        android:layout_width="269dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="492dp"
-        android:orientation="horizontal"
-
-        app:hintTextAppearance="@style/txtLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtEditPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Phone Number"
-            android:inputType="phone"
-            android:theme="@style/textEditStyle" />
-    </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_sign_in"
+        android:id="@+id/btn_sign_up"
         style="@style/home_page_button"
         android:layout_width="99dp"
         android:layout_height="37dp"
