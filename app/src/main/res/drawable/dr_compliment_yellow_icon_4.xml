@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <size
+                android:width="71dp"
+                android:height="71dp"></size>
+            <solid android:color="#E5EDD170"></solid>
+        </shape>
+    </item>
+
+    <item
+        android:width="23.8dp"
+        android:height="32.2dp"
+        android:left="23.6dp"
+        android:top="8.6dp">
+        <bitmap android:src="@drawable/complmt_image4_bulb"></bitmap>
+    </item>
+    <item
+        android:width="9.1dp"
+        android:height="9.1dp"
+        android:left="27.1dp"
+        android:top="12.1dp">
+        <bitmap android:src="@drawable/blue_arc"></bitmap>
+    </item>
+    <item
+        android:width="1.4dp"
+        android:height="4.2dp"
+        android:left="34.8dp"
+        android:top="3dp">
+        <bitmap android:src="@drawable/complimt_image4degree_0"></bitmap>
+    </item>
+    <item
+        android:width="3.38dp"
+        android:height="3.38dp"
+        android:left="44.7dp"
+        android:top="7.92dp">
+        <bitmap android:src="@drawable/complimt_image4degree_7_5"></bitmap>
+    </item>
+    <item
+        android:width="4.2dp"
+        android:height="1.4dp"
+        android:left="48.8dp"
+        android:top="19.8dp">
+        <bitmap android:src="@drawable/complimt_image4degree_15"></bitmap>
+    </item>
+    <item
+        android:width="3.38dp"
+        android:height="3.38dp"
+        android:left="44.7dp"
+        android:top="29.7dp">
+        <bitmap android:src="@drawable/complimt_image4degree_22_5"></bitmap>
+    </item>
+    <item
+        android:width="3.38dp"
+        android:height="3.38dp"
+        android:left="22.92dp"
+        android:top="29.7dp">
+        <bitmap android:src="@drawable/complimt_image4degree_37_5"></bitmap>
+    </item>
+    <item
+        android:width="4.2dp"
+        android:height="1.4dp"
+        android:left="18dp"
+        android:top="19.8dp">
+        <bitmap android:src="@drawable/complimt_image4degree_45"></bitmap>
+    </item>
+    <item
+        android:width="3.38dp"
+        android:height="3.38dp"
+        android:left="22.92dp"
+        android:top="7.92dp">
+        <bitmap android:src="@drawable/complimt_image4degree_52_5"></bitmap>
+    </item>
+
+</layer-list>

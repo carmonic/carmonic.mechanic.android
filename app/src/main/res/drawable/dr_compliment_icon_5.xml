@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <size
+                android:width="34.38dp"
+                android:height="37.22dp"></size>
+            <!--   <solid android:color="#E5EDD170"></solid> -->
+        </shape>
+    </item>
+
+    <item
+        android:width="21.35dp"
+        android:height="37.22dp"
+        android:left="13.03dp"
+        android:top="0dp">
+        <bitmap android:src="@drawable/complimt_image5_righthalf">
+
+        </bitmap>
+    </item>
+    <item
+        android:width="9.93dp"
+        android:height="9.93dp"
+        android:left="16.13dp"
+        android:top="13.63dp">
+        <bitmap android:src="@drawable/complimt_image5degree_inner_drop"></bitmap>
+    </item>
+    <item
+        android:width="4.34dp"
+        android:height="1.24dp"
+        android:left="9.49dp"
+        android:top="8.35dp">
+        <bitmap android:src="@drawable/complimt_image5degree_left_half_1"></bitmap>
+    </item>
+
+    <item
+        android:width="7.44dp"
+        android:height="1.24dp"
+        android:left="6.48dp"
+        android:top="12.69dp">
+        <bitmap android:src="@drawable/complimt_image5degree_left_half_2"></bitmap>
+    </item>
+
+    <item
+        android:width="10.55dp"
+        android:height="1.24dp"
+        android:left="3.38dp"
+        android:top="21.37dp">
+        <bitmap android:src="@drawable/complimt_image5degree_left_half_3"></bitmap>
+    </item>
+
+
+    <item
+        android:width="13.03dp"
+        android:height="1.24dp"
+        android:left="0.9dp"
+        android:top="17.03dp">
+        <bitmap android:src="@drawable/complimt_image5degree_left_half_4"></bitmap>
+    </item>
+
+
+    <item
+        android:width="9.31dp"
+        android:height="1.24dp"
+        android:left="4.42dp"
+        android:top="25.72dp">
+        <bitmap android:src="@drawable/complimt_image5degree_left_half_5"></bitmap>
+    </item>
+    <item
+        android:width="5.58dp"
+        android:height="1.24dp"
+        android:left="8.35dp"
+        android:top="30.06dp">
+        <bitmap android:src="@drawable/complimt_image5degree_left_half_6"></bitmap>
+    </item>
+
+</layer-list>

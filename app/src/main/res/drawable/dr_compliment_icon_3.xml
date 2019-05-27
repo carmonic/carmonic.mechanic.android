@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="35dp"
+        android:height="33.77dp">
+        <bitmap android:src="@drawable/complmt_image3_package"></bitmap>
+    </item>
+
+</layer-list>

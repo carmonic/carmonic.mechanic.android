@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/grad_hom"
+    >
+
+
+    <TextView
+        android:id="@+id/cancel_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="60dp"
+        android:text="X"
+        android:textColor="@color/colorYellow"
+        android:textStyle="normal"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:gravity="center|top"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical"
+        android:id="@+id/infoPanel">
+
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_picture"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:src="@drawable/user"
+            android:layout_marginLeft="10dp"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/nav_pic_border_dark"
+            android:elevation="4dp"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:id="@+id/txtCustomerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorYellow"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="FIKAYO" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        >
+        <ImageView
+
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@android:drawable/star_off"
+        />
+        <TextView
+            android:id="@+id/txtRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorYellow"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:paddingRight="2dp"
+
+            android:text="4.67" />
+    </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/txtDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="26dp"
+            android:fontFamily="@fonts/GlacialIndifferenceRegular"
+            android:text="@string/cust_description"
+            android:textColor="#B9B9B9"
+            android:textSize="20dp"
+            />
+
+
+        <TextView
+            android:id="@+id/txtText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/colorYellow"
+            android:textStyle="normal"
+            android:fontFamily="@fonts/GlacialIndifferenceRegular"
+            android:textSize="18dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Respond to his request in:" />
+
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/colorYellow"
+            android:textStyle="bold"
+            android:fontFamily="@fonts/GlacialIndifferenceRegular"
+            android:textSize="25dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="4.59minutes " />
+
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="69dp"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:layout_below="@+id/circles"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" >
+
+
+
+
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="97dp"
+            android:layout_height="33dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="80dp"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:background="@drawable/decline_button"
+            android:text="@string/decline"
+            />
+
+
+        <Button
+            android:id="@+id/btn_sign_in"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="97dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="37dp"
+            android:textStyle="bold"
+            android:background="@drawable/accept_button"
+            android:text="@string/accept"
+            />
+
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

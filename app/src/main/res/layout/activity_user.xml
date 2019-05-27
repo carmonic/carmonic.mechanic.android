@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".transfers.SendMoneyFormFragment"
+        android:padding="20dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp">
+            <androidx.cardview.widget.CardView
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="6dp"
+                app:cardBackgroundColor="@android:color/white">
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="100dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:layout_marginRight="30dp"
+                            android:layout_marginLeft="30dp"
+                            android:text="Jolly good fellow and all round nice guy. Here for the bizniz. Holla."
+                            android:textAlignment="center"
+                            android:textSize="16sp"
+                            android:id="@+id/user_description" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:layout_marginRight="30dp"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginTop="5dp"
+                            android:text="seun@seun.com"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:id="@+id/user_email" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/friend_request_label"
+                            android:visibility="gone"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="35dp"
+                            android:gravity="center"
+                            android:id="@+id/friend_request_layout">
+                            <Button
+                                android:id="@+id/friend_request_button"
+                                android:layout_width="220dp"
+                                android:layout_height="50dp"
+                                android:text="UnFriend"
+                                android:textStyle="bold"
+                                android:elevation="6dp"
+
+                                android:clickable="true"
+                                />
+                            <!--<include layout="@layout/wait_icon_layout"-->
+                                <!--android:id="@+id/friend_request_wait_icon"-->
+                                <!--android:layout_gravity="center"-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:visibility="gone" />-->
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center"
+                            android:id="@+id/user_actions_layout">
+                            <Button
+                                android:id="@+id/send_money_button"
+                                android:layout_width="220dp"
+                                android:layout_height="50dp"
+
+                                android:textStyle="bold"
+                                android:elevation="6dp"
+
+                                android:clickable="true"/>
+                            <Button
+                                android:id="@+id/request_money_button"
+                                android:layout_width="220dp"
+                                android:layout_height="50dp"
+
+                                android:textStyle="bold"
+                                android:elevation="6dp"
+
+                                android:clickable="true"
+                                android:layout_marginTop="20dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </ScrollView>
+            </androidx.cardview.widget.CardView>>
+        </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:divider="?android:attr/listDivider"
+            android:showDividers="end"
+            android:dividerPadding="120dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_picture"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:src="@drawable/african_black_male"
+                app:civ_border_width="1dp"
+                app:civ_border_color="@color/colorBlueHeader"
+                app:civ_fill_color="@android:color/white"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/user_name"
+                android:text="Francis Aremu"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

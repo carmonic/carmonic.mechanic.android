@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="98dp"
+        android:background="@drawable/round_corner"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+
+            <LinearLayout
+                android:id="@+id/ll_head_bar1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:paddingLeft="5dp"
+                android:layout_gravity="center"
+                android:layout_weight="00"
+                android:background="@android:color/transparent"
+                android:gravity="left">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/nav_header_desc"
+                    app:srcCompat="@mipmap/ic_launcher_round" />
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_head_bar"
+                android:layout_gravity="center"
+                android:layout_weight="80"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:padding="5dp">
+
+
+
+                <EditText
+                    android:id="@+id/txVwHomeHdr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00ffffff"
+                    android:hint="48B Moloney Borough, Ojuelegba"
+                    android:lineHeight="17sp"
+                    android:textColor="@color/colorYellow"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

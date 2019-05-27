@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#B9B9B9</color>
+    <color name="colorBlueHeader">#003D73</color>
+    <color name="colorYellow">#EDD170</color>
+    <color name="colorPrimaryTextColor">#edd170</color>
+
+
+    <color name="colorWhite">#ffffff</color>
+    <color name="nav_dark">#212121</color>
+    <color name="nav_pic_border_dark">#424141</color>
+    <color  name="decline_button">#B3361B</color>
+    <color name="dialog_text">#B9B9B9</color>
+    <color name="accept_button">#14831F</color>
+    <color name="card_bg">#BFB9B9B9</color>
+    
+
+</resources>

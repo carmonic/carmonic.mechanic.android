@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <size
+                android:width="71dp"
+                android:height="71dp"></size>
+            <solid android:color="#E5EDD170"></solid>
+        </shape>
+    </item>
+
+    <item
+        android:width="36.01dp"
+        android:height="31.51dp"
+        android:left="18.49dp"
+        android:top="4.75dp">
+        <bitmap android:src="@drawable/compliment_circle_image1_diamond_blue">
+
+        </bitmap>
+    </item>
+
+
+</layer-list>

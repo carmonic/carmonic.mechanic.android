@@ -50,17 +50,19 @@
         android:orientation="horizontal"
         android:paddingBottom="1dp"
         app:hintTextAppearance="@style/txtLabel"
-
+        android:theme="@style/splash_textinputlayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtEditName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
+            android:hint="@string/name"
             android:inputType="textPersonName"
-            android:theme="@style/textEditStyle" />
+             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,6 +74,7 @@
         android:layout_marginTop="340dp"
         android:orientation="horizontal"
         android:paddingBottom="1dp"
+        android:theme="@style/splash_textinputlayout"
         app:hintTextAppearance="@style/txtLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -80,9 +83,10 @@
             android:id="@+id/txtEditEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email Address"
+            android:hint="@string/email_address"
+            android:textColor="#EDD170"
             android:inputType="textEmailAddress"
-            android:theme="@style/textEditStyle" />
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,7 +97,7 @@
         android:layout_marginStart="52dp"
         android:layout_marginTop="416dp"
         android:orientation="horizontal"
-
+        android:theme="@style/splash_textinputlayout"
         android:paddingBottom="1dp"
         app:hintTextAppearance="@style/txtLabel"
         app:layout_constraintStart_toStartOf="parent"
@@ -104,10 +108,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone Number"
+            android:textColor="@color/colorYellow"
             android:inputType="phone"
-            android:theme="@style/textEditStyle" />
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnInfoPanel"
+        style="@style/home_page_button"
+        android:layout_width="99dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/register_button"
+
+        android:text="@string/Next"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

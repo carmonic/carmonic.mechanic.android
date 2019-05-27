@@ -1,0 +1,229 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">#FFFFFF</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="home_page_button">
+        <!-- Customize your theme here. -->
+        <item name="android:textColor">@color/colorYellow</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@fonts/product_sans_regular</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:inputType">textCapSentences</item>
+
+
+    </style>
+
+    <style name="txtLabel" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/colorYellow</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#EDD170</item>
+        <!-- Label Color in True state and bar color FALSE and TRUE state -->
+        <item name="android:colorAccent">#FFFFFF</item>
+        <item name="android:colorControlNormal">#ffffff</item>
+        <item name="android:colorControlHighlight">#FF0000</item>
+
+        <item name="android:colorControlActivated">@color/colorYellow</item>
+
+    </style>
+
+    <style name="splash_textinputlayout" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHighlight">@color/colorYellow</item>
+        <item name="android:textColorLink">@color/colorYellow</item>
+        <item name="android:textColorHint">@color/colorYellow</item>
+        <item name="android:textSize">16sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/colorYellow</item>
+        <item name="colorControlNormal">@color/colorYellow</item>
+        <item name="colorControlActivated">@color/colorYellow</item>
+
+        <item name="android:textColor">@color/colorYellow</item>
+    </style>
+
+    <style name="FieldTheme">
+
+        <item name="android:colorAccent">#000000</item>
+
+    </style>
+
+    <style name="textEditStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryTextColor</item>
+        <item name="android:letterSpacing">0.08</item>
+
+    </style>
+
+    <style name="drawer_theme" parent="@style/ThemeOverlay.AppCompat.Dark">
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="itemBackground">@android:color/transparent</item>
+        <item name="android:textColor">@color/colorYellow</item>
+        <item name="itemPadding">50dp</item>
+        <!--<item name="android:activatedBackgroundIndicator">@drawable/drawer_list_selector</item>-->
+    </style>
+
+
+    <!--&lt;!&ndash; Base application theme. &ndash;&gt;-->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+
+    <!--<item name="colorPrimary">@android:color/transparent</item>-->
+    <!--<item name="colorPrimaryDark">@color/Black_overlay</item>-->
+    <!--<item name="colorAccent">#47525E</item>-->
+    <!--<item name="windowActionBar">false</item>-->
+    <!--<item name="windowNoTitle">true</item>-->
+    <!--<item name="android:windowBackground">@drawable/background_img</item>-->
+    <!--&lt;!&ndash;<item name="android:windowTranslucentStatus">false</item>&ndash;&gt;-->
+    <!--&lt;!&ndash;<item name="android:windowTranslucentNavigation">false</item>&ndash;&gt;-->
+
+    <!--</style>-->
+
+    <style name="mainAppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!--<item name="android:windowBackground">@drawable/background_img</item>-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+
+
+    </style>
+
+    <!--<style name="main_textinputlayout" parent="TextAppearance.AppCompat">-->
+    <!--&lt;!&ndash; Hint color and label color in FALSE state &ndash;&gt;-->
+    <!--<item name="android:textColorHighlight">@color/item_pressed_color</item>-->
+    <!--<item name="android:textColorLink">@color/colorPrimaryLighter</item>-->
+    <!--<item name="android:textColorHint">@color/item_pressed_color</item>-->
+    <!--<item name="android:textSize">16sp</item>-->
+    <!--&lt;!&ndash; Label color in TRUE state and bar color FALSE and TRUE State &ndash;&gt;-->
+    <!--&lt;!&ndash;<item name="colorAccent">@color/colorPrimaryLighter</item>-->
+    <!--<item name="colorControlNormal">@color/colorPrimaryLighter</item>&ndash;&gt;-->
+    <!--<item name="colorControlActivated">@color/colorPrimaryLighter</item>-->
+    <!--</style>-->
+
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+    <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+    <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--<item name="windowActionBar">false</item>-->
+    <!--<item name="windowNoTitle">true</item>-->
+
+    <!--</style>-->
+
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+
+    <style name="LoginFormContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="ActionBarCompat">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:orientation">horizontal</item>
+
+    </style>
+
+    <style name="ActionBar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="WizardActionBar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:orientation">horizontal</item>
+
+    </style>
+
+    <style name="DashboardButton">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="FooterBar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+
+    <style name="header_button_back" parent="@android:style/TextAppearance.Widget.Button">
+        <item name="android:layout_height">@color/colorPrimary</item>
+        <item name="android:layout_width">48dip</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:layout_marginLeft">4dip</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+
+    <style name="auth_h1_text">
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:textColor">@color/colorYellow</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_gravity">center</item>
+
+
+    </style>
+
+
+    <style name="SplashTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="SplashTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="mainAppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="mainAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="mainAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+</resources>

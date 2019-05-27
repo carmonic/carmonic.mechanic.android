@@ -8,18 +8,165 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <include
-        layout="@layout/app_bar_dashboard"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <ImageView
+            android:id="@+id/appCompatMenuImage1"
+            android:layout_width="20dp"
+            android:layout_height="1.62dp"
+            android:layout_marginStart="21dp"
+            android:layout_marginTop="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/menuvector" />
+
+        <ImageView
+            android:id="@+id/appCompatMenuImage2"
+            android:layout_width="20dp"
+            android:layout_height="1.62dp"
+            android:layout_marginStart="21dp"
+            android:layout_marginTop="66.13dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/menuvector"
+            android:onClick="onClickMenuImage"/>
+
+        <ImageView
+            android:id="@+id/appCompatMenuImage3"
+            android:layout_width="20dp"
+            android:layout_height="1.62dp"
+            android:layout_marginStart="21dp"
+            android:layout_marginTop="72.26dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/menuvector" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomframe"
+            android:layout_width="320dp"
+            android:layout_height="89dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="72dp"
+            android:background="@drawable/dr_home_bottom"
+            android:paddingLeft="27dp"
+            android:paddingTop="16dp"
+            android:paddingRight="28dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.481"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:context=".home_screen">
+
+            <TextView
+                android:id="@+id/txtVwScreen2SubTitle"
+                android:layout_width="265dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="56dp"
+                android:layout_marginTop="543dp"
+
+                android:lineHeight="18sp"
+                android:text="What would you like to request today?"
+                android:textColor="#EDD170"
+                android:textSize="15dp"
+                tools:ignore="MissingConstraints" />
+
+<androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btn_container_left"
+                android:layout_width="90dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/dr_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatButton
+                       android:id="@+id/btn_mechanic"
+                    android:layout_width="65dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="1dp"
+                    android:background="#00ffffff"
+
+                    android:gravity="center"
+                    android:onClick="onclick_mechanic_request"
+                    android:padding="1dp"
+                    android:text="Mechanic"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorPrimaryTextColor"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btn_container_right"
+                android:layout_width="101dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/dr_button2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_towing_vehicle"
+                    android:layout_width="114dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="1dp"
+                    android:background="#00ffffff"
+
+                    android:onClick="onclick_mechanic_request"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:text="Towing Vehicle"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorPrimaryTextColor"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_dashboard"
-        app:menu="@menu/activity_dashboard_drawer" />
+        app:itemIconTint="@android:color/white"
+        app:headerLayout="@layout/nav_header"
+        android:background="@color/colorPrimaryDark"
+        app:theme="@style/drawer_theme"
+        app:menu="@menu/activity_dashboard_drawer"/>
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

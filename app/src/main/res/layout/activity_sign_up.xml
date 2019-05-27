@@ -47,18 +47,5 @@
     </LinearLayout>
 
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_sign_up"
-        style="@style/home_page_button"
-        android:layout_width="99dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="48dp"
-        android:background="@drawable/register_button"
-        android:onClick="onclick_regPage1"
-        android:text="@string/Next"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

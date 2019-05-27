@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="35dp"
+        android:height="32.54dp">
+        <bitmap android:src="@drawable/complmt_image2_heart"></bitmap>
+    </item>
+    <item
+        android:width="7.4dp"
+        android:height="7.4dp"
+        android:left="4.04dp"
+        android:top="4.04dp">
+        <bitmap android:src="@drawable/complmt_image2_arc"></bitmap>
+    </item>
+</layer-list>

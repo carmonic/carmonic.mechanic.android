@@ -10,8 +10,9 @@
     >
 
 
-    <android.support.v7.widget.AppCompatImageButton
-        android:id="@+id/appCompatImageButton"
+    <androidx.appcompat.widget.AppCompatImageButton
+
+        android:id="@+id/appBackButton"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginStart="21dp"
@@ -58,7 +59,7 @@
         android:orientation="horizontal"
         android:paddingBottom="1dp"
         app:hintTextAppearance="@style/txtLabel"
-
+        android:theme="@style/splash_textinputlayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -68,7 +69,7 @@
             android:layout_height="wrap_content"
             android:hint="Email Address"
             android:inputType="textEmailAddress"
-            android:theme="@style/textEditStyle" />
+             />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -82,6 +83,7 @@
         android:paddingBottom="1dp"
         app:hintTextAppearance="@style/txtLabel"
         app:layout_constraintStart_toStartOf="parent"
+        android:theme="@style/splash_textinputlayout"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -90,7 +92,7 @@
             android:layout_height="wrap_content"
             android:hint="Password"
             android:inputType="textPassword"
-            android:theme="@style/textEditStyle" />
+             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,27 +101,24 @@
         android:layout_width="186dp"
         android:layout_height="28dp"
         android:layout_marginStart="102dp"
-        android:layout_marginTop="445dp"
-
+        android:layout_marginTop="450dp"
         android:text="Forgot your password?"
         android:textAlignment="center"
         android:textColor="#3396BD"
-
         android:textSize="12dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_sign_in"
+    <Button
+        android:id="@+id/btnSubmit"
         style="@style/home_page_button"
         android:layout_width="99dp"
         android:layout_height="37dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="48dp"
         android:background="@drawable/register_button"
-
         android:text="@string/Submit"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
