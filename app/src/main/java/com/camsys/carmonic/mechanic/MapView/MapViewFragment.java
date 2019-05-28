@@ -11,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -20,12 +22,7 @@ import android.provider.Settings;
 
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -38,6 +35,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -139,6 +137,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     public void showNotification(final Activity activity){
         final Dialog dialog =new Dialog(activity);
         dialog.setContentView(R.layout.fragment_result_dialog);
+        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+        lp.dimAmount = 0.7f;
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         TextView txtNotificationText  = (TextView)dialog.findViewById(R.id.txtNotification);
         TextView txtSeeDetail  = (TextView)dialog.findViewById(R.id.txtSeeDetail);
         TextView txtDecline  = (TextView)dialog.findViewById(R.id.txtDecline);
@@ -150,6 +154,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             public void onClick(View v) {
 
                 startActivity(new Intent(activity, CustomerDetail.class));
+                activity.overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
             }
         });
 
@@ -229,7 +234,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
-
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         showNotification(getActivity());
 
