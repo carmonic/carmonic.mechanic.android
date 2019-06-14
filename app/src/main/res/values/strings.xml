@@ -65,10 +65,34 @@
     <string name="see_details">See Details</string>
     <string name="decline_request">Decline Request</string>
     <string name="title_activity_customer_detail">CustomerDetail</string>
-    <string name="cust_description">XXXX needs help with his car. \n He is YYYY kilometres away from you</string>
+    <string name="cust_description">XXXX needs help with his car.\nHe is YYYY kilometres away from you</string>
+    <string name="location_descr">Fikayo needs help with is car.Meet him at 789 Oriole Pkway </string>
+    <string name="car_fault">My car is a blue Audi R8 with plate number P9085Y9. My engine is overheating.</string>
 
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
     <string name="title_activity_customer_location">CustomerLocation</string>
+
+    <!--Fetch Address-->
+    <string name="no_geocoder_available">No geocoder available</string>
+
+    <string name="fetch_address">Fetch address</string>
+
+    <string name="address_found">Address found</string>
+
+    <string name="no_address_found">Sorry, no address found</string>
+    <string name="no_location_data_provided">No location data provided</string>
+    <string name="service_not_available">Sorry, the service is not available</string>
+    <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
+
+    <string-array name="order_title">
+        <item>In Transit</item>
+        <item>Arrived</item>
+        <item>In Progress</item>
+        <item>Completed</item>
+        <item>Rejected</item>
+        <item>Accepted</item>
+    </string-array>
+
 
 </resources>

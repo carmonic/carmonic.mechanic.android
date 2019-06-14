@@ -5,41 +5,36 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
-import android.os.*;
+import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.*;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
-import com.camsys.carmonic.mechanic.Dasboard.AcceptAndDeclineFragment;
-import com.camsys.carmonic.mechanic.Dasboard.AlertDialogFragment;
-import com.camsys.carmonic.mechanic.Dasboard.CustomerDetailFragment;
-import com.camsys.carmonic.mechanic.Dasboard.OrderDetailFragment;
 import com.camsys.carmonic.mechanic.R;
-import com.camsys.carmonic.mechanic.Service.FetchAddressIntentService;
-import com.camsys.carmonic.mechanic.Utilities.Constants;
-import com.camsys.carmonic.mechanic.Utilities.SharedData;
 import com.camsys.carmonic.mechanic.Utilities.Util;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -59,51 +54,77 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 
-public class MapViewFragment extends Fragment implements OnMapReadyCallback,
+public class CustomerLocationMapFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnCameraMoveStartedListener,
         GoogleMap.OnCameraMoveListener,
         GoogleMap.OnCameraMoveCanceledListener,
         GoogleMap.OnCameraIdleListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, AcceptAndDeclineFragment.MyDialogFragmentListener {
+        LocationListener {
 
 
+
+
+
+
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final String LOG_TAG = "MyActivity";
+    private final int[] MAP_TYPES = {GoogleMap.MAP_TYPE_SATELLITE,
+            GoogleMap.MAP_TYPE_NORMAL,
+            GoogleMap.MAP_TYPE_HYBRID,
+            GoogleMap.MAP_TYPE_TERRAIN,
+            GoogleMap.MAP_TYPE_NONE};
     // private AddressResultReceiver mResultReceiver;
     protected LatLng start;
+
+
     protected LatLng mCenterLatLong;
+
+    protected String startAddress;
+    protected String endAddress;
     protected GoogleApiClient mGoogleApiClient;
+
+
     MapView mMapView;
     GoogleMap mGoogleMap;
     SupportMapFragment mapFrag;
+
     Location mLastLocation;
     Switch switch1;
+
     String[] permissionsRequired = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     int rideType = 0;
+
+
+    //SessionManager session = null;
+    SharedPreferences installPref;
+    String username;
     //UserAccount user;
+
+
     private LocationRequest mLocationRequest;
+
     private PolylineOptions currPolylineOptions;
     String regID;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    SharedData sharedData =   null;
-    EditText txtMyLocation =  null;
+    String   DriverId = "";
 
-    private AddressResultReceiver mResultReceiver;
-    protected String mAddressOutput;
-    protected String mAreaOutput;
-    protected String mCityOutput;
-    protected String mStateOutput;
+    Button btnStartTrip;
+    ImageView img;
+    TextView txtDropOff;
+    TextView txtPickUp;
+    Button fab;
 
-    LinearLayout mLinearLayout;
-    TextView  txtOrderStatus;
-    AppCompatButton btnContact;
+    String TripId;
+    LinearLayout linear;
 
 
 
-    public void showRequest(final Activity activity){
+    public void showNotification(final Activity activity){
         final Dialog dialog =new Dialog(activity);
         dialog.setContentView(R.layout.fragment_result_dialog);
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
@@ -112,24 +133,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-//        LinearLayout layout = dialog.findViewById(R.id.root);
-//        ViewGroup.LayoutParams params = layout.getLayoutParams();
-//        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-//        params.width =  ViewGroup.LayoutParams.WRAP_CONTENT;
-//        layout.setLayoutParams(params);
-
-        TextView txtTopic  = (TextView)dialog.findViewById(R.id.txtTopic);
-        TextView cancelButton  = (TextView)dialog.findViewById(R.id.cancel_button);
-
-        txtTopic.setVisibility(View.GONE);
-        cancelButton.setVisibility(View.GONE);
-
-
         TextView txtNotificationText  = (TextView)dialog.findViewById(R.id.txtNotification);
         TextView txtSeeDetail  = (TextView)dialog.findViewById(R.id.txtSeeDetail);
         TextView txtDecline  = (TextView)dialog.findViewById(R.id.txtDecline);
-
-        txtNotificationText.setText("A customer needs your help 5km away from your location");
 
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
@@ -139,30 +145,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 
 
 
-                final AcceptAndDeclineFragment myBottomSheet = AcceptAndDeclineFragment.newInstance("", new AcceptAndDeclineFragment.MyDialogFragmentListener() {
-                    @Override
-                    public void onReturnValue(boolean indicator) {
-
-                        if(indicator) {
-
-                            ShowingAcceptRequest(getActivity());
-
-                        }else{
-
-                            showingRejectRequest(getActivity());
-                        }
-
-                    }
-                });
-                myBottomSheet.show(getActivity().getSupportFragmentManager(), myBottomSheet.getTag());
-                dialog.dismiss();
             }
         });
 
         txtDecline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showingRejectRequest(getActivity());
+
                 dialog.dismiss();
              }
         });
@@ -170,123 +159,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     }
 
 
-    public void ShowingAcceptRequest(final Activity activity){
-        final Dialog dialog =new Dialog(activity);
-        dialog.setContentView(R.layout.fragment_result_dialog);
-        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.dimAmount = 0.7f;
-        dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        LinearLayout layout = dialog.findViewById(R.id.root);
-        ViewGroup.LayoutParams params = layout.getLayoutParams();
-        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        params.width =  ViewGroup.LayoutParams.WRAP_CONTENT;
-        layout.setLayoutParams(params);
-
-        TextView txtTopic  = (TextView)dialog.findViewById(R.id.txtTopic);
-        TextView cancelButton  = (TextView)dialog.findViewById(R.id.cancel_button);
-        TextView txtNotificationText  = (TextView)dialog.findViewById(R.id.txtNotification);
-        TextView txtSeeDetail  = (TextView)dialog.findViewById(R.id.txtSeeDetail);
-        TextView txtDecline  = (TextView)dialog.findViewById(R.id.txtDecline);
-
-        txtTopic.setVisibility(View.VISIBLE);
-        cancelButton.setVisibility(View.GONE);
-
-        txtTopic.setText("You accepted the request!");
-        txtNotificationText.setText("Fikayo is waiting for you at 789 Oriole Pkway");
-        txtNotificationText.setTextColor(getResources().getColor(R.color.dialog_text));
-
-        txtDecline.setTextColor(getResources().getColor(R.color.dialog_text));
-
-        txtDecline.setText("Get Direction");
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        txtSeeDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                final CustomerDetailFragment myBottomSheet = CustomerDetailFragment.newInstance("");
-                myBottomSheet.show(getActivity().getSupportFragmentManager(), myBottomSheet.getTag());
-
-            }
-        });
-
-        txtDecline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLinearLayout.setVisibility(View.VISIBLE);
-                dialog.dismiss();
-
-
-
-            }
-        });
-        dialog.show();
-    }
-
-
-
-
-    public void showingRejectRequest(final Activity activity){
-        final Dialog dialog =new Dialog(activity);
-        dialog.setContentView(R.layout.fragment_result_dialog);
-        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.dimAmount = 0.7f;
-        dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-
-        View view =  (View)dialog.findViewById(R.id.line1);
-        TextView txtTopic  = (TextView)dialog.findViewById(R.id.txtTopic);
-        TextView cancelButton  = (TextView)dialog.findViewById(R.id.cancel_button);
-        LinearLayout container = (LinearLayout) dialog.findViewById(R.id.container);
-        txtTopic.setVisibility(View.VISIBLE);
-        cancelButton.setVisibility(View.VISIBLE);
-        container.setVisibility(View.GONE);
-        view.setVisibility(View.GONE);
-
-        TextView txtNotificationText  = (TextView)dialog.findViewById(R.id.txtNotification);
-
-        txtTopic.setText("You rejected the request!");
-        txtNotificationText.setText("The request has been transferred to another mechanic.");
-        txtNotificationText.setTextColor(getResources().getColor(R.color.dialog_text));
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-
-//        txtSeeDetail.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                final CustomerDetailFragment myBottomSheet = CustomerDetailFragment.newInstance("");
-//                myBottomSheet.show(getActivity().getSupportFragmentManager(), myBottomSheet.getTag());
-//
-//            }
-//        });
-//
-//        txtDecline.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//            }
-//        });
-        dialog.show();
-    }
-
-
-    public static MapViewFragment newInstance(String columnCount) {
-        MapViewFragment fragment = new MapViewFragment();
+    public static CustomerLocationMapFragment newInstance(String columnCount) {
+        CustomerLocationMapFragment fragment = new CustomerLocationMapFragment();
         Bundle args = new Bundle();
         args.putString("tripId", columnCount);
         fragment.setArguments(args);
@@ -313,12 +187,28 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public CameraPosition setHomeCamera(LatLng latlng, String Address) {
+
         if (latlng != null) {
+
+
             CameraPosition camera = new CameraPosition.Builder().target(latlng)
                     .zoom(15.5f)
                     .bearing(0)
                     .tilt(25)
                     .build();
+
+//       mGoogleMap.animateCamera(CameraUpdateFactory
+//               .newCameraPosition(camera), null);
+//
+//       markerOptions.position(latlng);
+//       markerOptions.title(Address);
+//       markerOptions.draggable(true).visible(true);
+//       markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_home_page));
+//      // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15));
+//       mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+//       mGoogleMap.addMarker(markerOptions);
+
+
             return camera;
 
         }
@@ -332,52 +222,41 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         View rootView = inflater.inflate(R.layout.fragment_map_view, container, false);
         setHasOptionsMenu(true);
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
-        txtMyLocation = (EditText) rootView.findViewById(R.id.txtMyLocation) ;
-        txtOrderStatus = (TextView)rootView.findViewById(R.id.txtOrderStatus);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        sharedData =  new SharedData(getActivity());
-        String showPopUp = sharedData.Get(Constants.IS_LOG_IN,null);
-        mLinearLayout = (LinearLayout)rootView.findViewById(R.id.bottomContainer) ;
-        mLinearLayout.setVisibility(View.GONE);
-        showRequest(getActivity());
 
-        checkPlayService(getActivity());
-        displayFirebaseRegId();
+        showNotification(getActivity());
+
+//        try {
+//            MapsInitializer.initialize(getActivity().getApplicationContext());
+//
+//
+//            View locationButton = ((View) mMapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+//            RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+//            // position on right bottom
+//            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+//            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         mMapView.getMapAsync(this);
-        mResultReceiver = new AddressResultReceiver(new Handler());
 
 
-        txtOrderStatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
 
-                final OrderDetailFragment orderDetailFragment = OrderDetailFragment.newInstance("", new OrderDetailFragment.MyDialogFragmentListener() {
-                    @Override
-                    public void onReturnValue(boolean indicator) {
-
-                        Toast.makeText(getActivity(), "Hi text", Toast.LENGTH_LONG).show();
-                    }
-                });
-                orderDetailFragment.show(getActivity().getSupportFragmentManager(), orderDetailFragment.getTag());
-
-            }
-        });
 
 
-        return rootView;
-    }
 
-    private void checkPlayService(Context context){
 
         if (checkPlayServices()) {
             // If this check succeeds, proceed with normal processing.
             // Otherwise, prompt user to get valid Play Services APK.
             if (!Util.isLocationEnabled(getActivity())) {
                 // notify user
-                android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(context);
+                android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(getActivity());
                 dialog.setMessage("Location not enabled!");
                 dialog.setPositiveButton("Open location settings", new DialogInterface.OnClickListener() {
                     @Override
@@ -398,10 +277,19 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             }
             buildGoogleApiClient();
         } else {
-            Toast.makeText(context, "Location not supported in this device", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Location not supported in this device", Toast.LENGTH_SHORT).show();
         }
 
+
+        displayFirebaseRegId();
+
+
+
+
+
+        return rootView;
     }
+
 
     private void displayFirebaseRegId() {
         SharedPreferences pref = getActivity().getSharedPreferences("SHARED_PREF", 0);
@@ -544,7 +432,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 //Location Permission already granted
                 buildGoogleApiClient();
                 mGoogleMap.setMyLocationEnabled(true);
-                mGoogleMap.setMapType(Constants.MAP_TYPES[1]);
+                mGoogleMap.setMapType(MAP_TYPES[1]);
                 // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(startDirection));
                 mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(14));
                 mGoogleMap.setBuildingsEnabled(true);
@@ -557,7 +445,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
                 mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-                startIntentService(mLastLocation);
 
                 //initCamera(mLastLocation);
             } else {
@@ -567,7 +454,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         } else {
             buildGoogleApiClient();
             mGoogleMap.setMyLocationEnabled(true);
-            mGoogleMap.setMapType(Constants.MAP_TYPES[1]);
+            mGoogleMap.setMapType(MAP_TYPES[1]);
             mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(14));
             //mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
             //initCamera(mLastLocation);
@@ -580,36 +467,37 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             // We will provide our own zoom controls.
             mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
             mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
-
-            startIntentService(mLastLocation);
         }
 
 
 
 
-       mGoogleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                Log.d("Camera postion change" + "", cameraPosition + "");
-                mCenterLatLong = cameraPosition.target;
-
-
-                mGoogleMap.clear();
-
-                try {
-
-                    Location mLocation = new Location("");// Location("");
-                    mLocation.setLatitude(mCenterLatLong.latitude);
-                    mLocation.setLongitude(mCenterLatLong.longitude);
-
-                    startIntentService(mLocation);
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        mGoogleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+//            @Override
+//            public void onCameraChange(CameraPosition cameraPosition) {
+//                Log.d("Camera postion change" + "", cameraPosition + "");
+//                mCenterLatLong = cameraPosition.target;
+//
+//
+//                mGoogleMap.clear();
+//
+//                try {
+//
+//                    Location mLocation = new Location("");// Location("");
+//                    mLocation.setLatitude(mCenterLatLong.latitude);
+//                    mLocation.setLongitude(mCenterLatLong.longitude);
+//
+//                    startIntentService(mLocation);
+//
+//                   // Toast.makeText(getActivity(),"Lat : " + mCenterLatLong.latitude + "," + "Long : " + mCenterLatLong.longitude,Toast.LENGTH_LONG).show();
+//
+//                 //   mLocationMarkerText.setText("Lat : " + start.latitude + "," + "Long : " + start.longitude);
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
     }
 
@@ -624,6 +512,19 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onConnected(Bundle bundle) {
+//        mLocationRequest = new LocationRequest();
+//        mLocationRequest.setInterval(1000);
+//        mLocationRequest.setFastestInterval(5000);
+//        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        try {
+//            if (ContextCompat.checkSelfPermission(getActivity(), permissionsRequired[0])
+//                    == PackageManager.PERMISSION_GRANTED) {
+//                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+//
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
         try {
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -640,7 +541,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                     mGoogleApiClient);
             if (mLastLocation != null) {
                 // changeMap(mLastLocation);
-                initCamera(mLastLocation);
+                initCamera(mLastLocation, rideType + "");
                 Log.d("TAG", "ON connected");
 
             } else
@@ -680,26 +581,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-        initCamera(mLastLocation);
+//        if (mCurrLocationMarker != null) {
+//            mCurrLocationMarker.remove();
+//        }
+//        //mLastLocation.setBearing();
+//        initCamera(mLastLocation,rideType +"");
 
 
-    }
-
-
-    /**
-     * Creates an intent, adds location data to it as an extra, and starts the intent service for
-     * fetching an address.
-     */
-    protected void startIntentService(Location mLocation) {
-        // Create an intent for passing to the intent service responsible for fetching the address.
-        Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
-        intent.putExtra(Constants.LocationConstants.RECEIVER, mResultReceiver);
-        intent.putExtra(Constants.LocationConstants.LOCATION_DATA_EXTRA, mLocation);
-        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::");
-        System.out.println(":::::::About:::to:::call:::the:::service:::::::::");
-        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::");
-        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::");
-        getActivity().startService(intent);
     }
 
     private void checkLocationPermission() {
@@ -721,7 +609,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                                 //Prompt the user once explanation has been shown
                                 ActivityCompat.requestPermissions(getActivity(),
                                         new String[]{permissionsRequired[0]},
-                                        Constants.MY_PERMISSIONS_REQUEST_LOCATION);
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
                             }
                         })
                         .create()
@@ -732,7 +620,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{permissionsRequired[0]},
-                        Constants.MY_PERMISSIONS_REQUEST_LOCATION);
+                        MY_PERMISSIONS_REQUEST_LOCATION);
             }
         }
     }
@@ -741,7 +629,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case Constants.MY_PERMISSIONS_REQUEST_LOCATION: {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -769,7 +657,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void initCamera(Location location) {
+    private void initCamera(Location location, String rideType) {
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
@@ -789,8 +677,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         // mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        mGoogleMap.setMapType(Constants.MAP_TYPES[1]);
+        mGoogleMap.setMapType(MAP_TYPES[1]);
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+
+        // System.out.println("getLatitude:: " +mLastLocation.getLatitude() + " getLongitude ::  " + mLastLocation.getLongitude());
+
+
         // startIntentService(location);
     }
 
@@ -801,7 +693,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 .anchor(0.5f, 0.5f)
                 .title(title)
                 .snippet(snippet)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_burst_mode)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.asterisk_star)));
     }
 
 
@@ -893,7 +785,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
                 GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(),
-                        Constants.PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
                 //finish();
             }
@@ -916,60 +808,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         }
         // only got here if we didn't return false
         return true;
-    }
-
-    /**
-     * Updates the address in the UI.
-     */
-    protected void displayAddressOutput() {
-        try {
-            if (mAreaOutput != null)
-                txtMyLocation.setText(mAddressOutput);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onReturnValue(boolean indicator) {
-
-    }
-
-
-    /**
-     * Receiver for data sent from FetchAddressIntentService.
-     */
-    class AddressResultReceiver extends ResultReceiver {
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        /**
-         * Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
-         */
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-            // Display the address string or an error message sent from the intent service.
-            mAddressOutput = resultData.getString(Constants.LocationConstants.RESULT_DATA_KEY);
-
-            mAreaOutput = resultData.getString(Constants.LocationConstants.LOCATION_DATA_AREA);
-
-            mCityOutput = resultData.getString(Constants.LocationConstants.LOCATION_DATA_CITY);
-            mStateOutput = resultData.getString(Constants.LocationConstants.LOCATION_DATA_STREET);
-
-            displayAddressOutput();
-
-            // Show a toast message if an address was found.
-            if (resultCode == Constants.LocationConstants.SUCCESS_RESULT) {
-                //  showToast(getString(R.string.address_found));
-
-
-            }
-
-
-        }
-
     }
 
 

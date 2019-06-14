@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="4dp"
+    android:orientation="vertical"
+    tools:ignore="UnusedAttribute">
+
+    <LinearLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -29,7 +48,7 @@
         android:layout_below="@+id/cancel_action"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="100dp"
         android:orientation="vertical"
         android:visibility="visible"
        >
@@ -37,11 +56,12 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_picture"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
             android:elevation="4dp"
             android:src="@drawable/user"
             app:civ_border_color="@color/nav_pic_border_dark"
@@ -99,12 +119,29 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="26dp"
             android:layout_marginRight="40dp"
-
             android:fontFamily="@fonts/GlacialIndifferenceRegular"
             android:gravity="center"
             android:text="@string/cust_description"
             android:textColor="#B9B9B9"
             android:textSize="20dp" />
+
+
+        <!--<TextView-->
+            <!--android:layout_below="@+id/txtDescription"-->
+            <!--android:id="@+id/txtNote"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginLeft="40dp"-->
+            <!--android:layout_marginRight="40dp"-->
+            <!--android:layout_marginTop="15dp"-->
+            <!--android:fontFamily="@fonts/GlacialIndifferenceRegular"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/car_fault"-->
+            <!--android:textColor="@color/dialog_text"-->
+            <!--android:textSize="17sp"-->
+            <!--android:textStyle="normal" />-->
 
 
         <TextView
@@ -115,7 +152,7 @@
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="@fonts/GlacialIndifferenceRegular"
             android:gravity="center"
             android:text="Respond to his request in:"
@@ -124,13 +161,13 @@
             android:textStyle="normal" />
 
         <TextView
-            android:id="@+id/txtTime"
+            android:id="@+id/txtTimer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtText"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:fontFamily="@fonts/GlacialIndifferenceRegular"
             android:gravity="center"
             android:text="4.59minutes "
@@ -142,12 +179,12 @@
             android:id="@+id/relativeLayout1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txtTime"
+            android:layout_below="@+id/txtTimer"
             android:layout_gravity="bottom"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
             android:gravity="bottom"
-            android:padding="20dp">
+            android:padding="5dp">
 
             <Button
                 android:id="@+id/btnDecline"
@@ -181,3 +218,7 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

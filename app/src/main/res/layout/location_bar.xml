@@ -35,11 +35,11 @@
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:contentDescription="@string/nav_header_desc"
-                    app:srcCompat="@mipmap/ic_launcher_round" />
+                    app:srcCompat="@drawable/ic_location_on" />
 
 
 
@@ -58,10 +58,11 @@
 
 
                 <EditText
-                    android:id="@+id/txVwHomeHdr"
+                    android:id="@+id/txtMyLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#00ffffff"
+                    android:enabled="false"
                     android:hint="48B Moloney Borough, Ojuelegba"
                     android:lineHeight="17sp"
                     android:textColor="@color/colorYellow"

@@ -6,45 +6,54 @@
     android:layout_height="200dp"
     android:background="@android:color/transparent"
     android:orientation="vertical"
+    android:id="@+id/root"
     >
 
 
         <RelativeLayout
             android:id="@+id/button_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/dialog_background"
+            android:background="@drawable/bottom_layout_bg"
             >
             <TextView
                 android:id="@+id/cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="X"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/colorYellow"
-                android:textStyle="normal"
-                android:textSize="20dp"
+                android:textStyle="bold"
+                android:textSize="10dp"
                 />
+
+
+
+
             <LinearLayout
                 android:id="@+id/titleLayout"
+                android:layout_below="@+id/cancel_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:gravity="center_horizontal|center"
                 >
-
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Topic"
-                    android:id="@+id/txtTitle"
-                    style="@style/auth_h1_text"
+                    android:id="@+id/txtTopic"
+                    android:textColor="@color/colorPrimaryTextColor"
+                    android:layout_gravity="center"
                     android:textAlignment="center"
+                    android:gravity="center"
                     android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp"/>
+
 
             </LinearLayout>
             <LinearLayout
@@ -54,6 +63,7 @@
                 android:orientation="horizontal"
                 android:layout_below="@id/titleLayout"
                 android:gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
                 >
 
 
@@ -73,27 +83,26 @@
             </LinearLayout>
 
 
-            <!--<view-->
-                <!--android:id="@+id/line1"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="3dp"-->
-                <!--android:layout_below="@+id/circles"-->
-                <!--android:layout_marginTop="20dp"-->
-                <!--android:background="@color/dialog_text"/>-->
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/circles"
+
+                android:background="#B9B9B9"/>
 
 
             <LinearLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:gravity="bottom"
-                android:layout_below="@+id/circles"
+                android:layout_below="@+id/line1"
                 android:orientation="horizontal" >
 
                 <TextView
 
                     android:id="@+id/txtSeeDetail"
-                    style="@style/auth_h1_text"
                     android:layout_width="0dp"
                     android:layout_height="33dp"
                     android:layout_gravity="center"
@@ -102,26 +111,27 @@
                     android:text="@string/see_details"
                     android:textColor="@color/dialog_text"
                     android:textSize="12sp"
+                    android:layout_margin="10dp"
                     android:textStyle="bold" />
 
 
-                <!--<view-->
-                    <!--android:id="@+id/line2"-->
-                    <!--android:layout_width="3dp"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:background="@color/colorWhite"/>-->
+                <View
+                    android:id="@+id/line2"
+                    android:layout_width="1dp"
+                    android:layout_height="50dp"
+                    android:background="@color/dialog_text"/>
 
 
                 <TextView
 
                     android:id="@+id/txtDecline"
-                    style="@style/auth_h1_text"
                     android:layout_width="0dp"
                     android:layout_height="33dp"
                     android:layout_gravity="center"
                     android:layout_weight="2"
                     android:gravity="center"
                     android:text="@string/decline_request"
+                    android:layout_margin="10dp"
                     android:textColor="@color/decline_button"
                     android:textSize="12sp"
                     android:textStyle="bold" />

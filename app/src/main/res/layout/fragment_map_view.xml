@@ -1,5 +1,7 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="false"
@@ -25,4 +27,167 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+
+
+
+    <LinearLayout
+        android:id="@+id/bottomContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center|bottom"
+    android:gravity="center"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical">
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dip"
+            android:layout_marginBottom="21dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/bottom_layout_bg"
+           >
+
+            <!--&lt;!&ndash;  ListRow Left sied Thumbnail image &ndash;&gt;-->
+            <LinearLayout
+                android:id="@+id/thumbnail"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dip"
+                android:gravity="top|left"
+                android:padding="3dip">
+
+                <ImageView
+                    android:id="@+id/list_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/user" />
+
+            </LinearLayout>
+
+
+
+
+
+            <LinearLayout
+                android:id="@+id/container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/thumbnail"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_toRightOf="@+id/thumbnail"
+                android:layout_below="@+id/user_picture"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtCustomerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_picture"
+                    android:text="FIKAYO"
+                    android:textColor="@color/colorYellow"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="bottom"
+                    android:src="@android:drawable/star_off" />
+
+                <TextView
+                    android:id="@+id/txtRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="2dp"
+                    android:text="4.67"
+                    android:textColor="@color/colorYellow"
+                    android:textSize="10dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+
+
+            <TextView
+            android:id="@+id/txtTimeToReach"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/container"
+            android:textSize="10dip"
+                android:layout_marginLeft="5dp"
+            android:layout_marginTop="1dip"
+                android:textColor="@color/colorPrimaryTextColor"
+            android:layout_toRightOf="@+id/thumbnail"
+            android:text="You are 7 minutes away from Fikayo" />
+
+
+            <TextView
+            android:id="@+id/txtOrderStatus"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtTimeToReach"
+            android:textColor="@color/decline_button"
+            android:textSize="10dip"
+            android:layout_marginTop="1dip"
+            android:layout_toRightOf="@+id/thumbnail"
+                android:textStyle="bold"
+                android:layout_marginLeft="5dp"
+            android:text="Order status" />
+
+            <!-- Rightend Arrow -->
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btn_container_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/container"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/dr_button"
+                >
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnContact"
+                    android:layout_width="65dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="1dp"
+                    android:background="#00ffffff"
+                    android:gravity="center"
+                    android:padding="1dp"
+                    android:text="Contact"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorPrimaryTextColor"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
 </FrameLayout>

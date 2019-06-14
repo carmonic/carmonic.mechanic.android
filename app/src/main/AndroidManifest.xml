@@ -31,13 +31,9 @@
             android:label="@string/title_activity_customer_location"
             android:theme="@style/mainAppTheme.NoActionBar"></activity>
         <activity
-            android:name=".Dasboard.CustomerDetail"
-            android:label="@string/title_activity_customer_detail"
-            android:theme="@style/mainAppTheme.NoActionBar" />
-        <activity
             android:name=".Dasboard.test"
             android:label="@string/title_activity_test"
-            android:theme="@style/mainAppTheme" />
+           />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

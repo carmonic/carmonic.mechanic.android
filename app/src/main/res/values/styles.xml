@@ -97,11 +97,10 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorWhite</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <!--<item name="android:windowBackground">@drawable/background_img</item>-->
@@ -202,7 +201,7 @@
 
 
     <style name="auth_h1_text">
-        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginTop">0dp</item>
         <item name="android:layout_marginBottom">20dp</item>
         <item name="android:textColor">@color/colorYellow</item>
         <item name="android:textStyle">normal</item>

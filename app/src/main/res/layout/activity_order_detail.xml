@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="4dp"
+    android:orientation="vertical"
+    tools:ignore="UnusedAttribute">
+
+    <LinearLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/coordinatorLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/grad_hom"
+            >
+
+
+            <TextView
+                android:id="@+id/cancel_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="40dp"
+                android:text="X"
+                android:textColor="@color/colorYellow"
+                android:textStyle="normal"
+                android:textSize="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+
+
+            <RelativeLayout
+                android:id="@+id/infoPanel"
+                android:layout_below="@+id/cancel_action"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="60dp"
+                android:orientation="vertical"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Order Details"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorYellow"
+                    android:textSize="24dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/title"
+                    android:text="Update your order as neccesary"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/dialog_text"
+                    android:textSize="15dp"
+                    android:textStyle="normal" />
+
+
+
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/user_picture"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_below="@+id/txtDesc"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:elevation="4dp"
+                    android:src="@drawable/user"
+                    app:civ_border_color="@color/nav_pic_border_dark"
+                    app:civ_border_width="1dp" />
+
+
+
+
+
+
+                <LinearLayout
+                    android:id="@+id/container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_picture"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtCustomerName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/user_picture"
+                        android:text="FIKAYO"
+                        android:textColor="@color/colorYellow"
+                        android:textSize="17dp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="bottom"
+                        android:src="@android:drawable/star_off" />
+
+                    <TextView
+                        android:id="@+id/txtRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="2dp"
+                        android:text="4.67"
+                        android:textColor="@color/colorYellow"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/txtDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container"
+                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="40dp"
+                    android:fontFamily="@fonts/GlacialIndifferenceRegular"
+                    android:gravity="center"
+                    android:text="@string/location_descr"
+                    android:textColor="#B9B9B9"
+                    android:textSize="16sp" />
+
+
+                <TextView
+                    android:id="@+id/txtText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtDescription"
+                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="35dp"
+                    android:fontFamily="@fonts/GlacialIndifferenceRegular"
+                    android:gravity="center"
+                    android:text="Here’s a note from Fikayo:"
+                    android:textColor="@color/colorYellow"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtNote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtText"
+                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@fonts/GlacialIndifferenceRegular"
+                    android:gravity="center"
+                    android:text="@string/car_fault"
+                    android:textColor="@color/dialog_text"
+                    android:textSize="17sp"
+                    android:textStyle="normal" />
+
+
+                <TextView
+                    android:id="@+id/txtOrderTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtNote"
+                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="45dp"
+                    android:fontFamily="@fonts/GlacialIndifferenceRegular"
+                    android:gravity="center"
+                    android:text="Order Status:"
+                    android:textColor="@color/colorYellow"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/dropdown"
+                    android:layout_below="@+id/txtOrderTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:entries="@array/order_title"/>
+
+
+
+            </RelativeLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+</LinearLayout>
