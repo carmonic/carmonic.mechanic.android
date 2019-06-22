@@ -16,13 +16,13 @@ public class Constants {
     public static final long ALARM_TRIGGER_AT_TIME = SystemClock.elapsedRealtime() + 30000;
     public static final int CONNECTION_TIMEOUT = 60000;  //1min
     public static final int SOCKET_CONNECTION_TIMEOUT = 90000;  //2min
-    public static String LOG_TAG = "WEMAMOBILE";
+
 
     public static String API_KEYS = "AIzaSyCrNr-TwLxRsDV2obUiVRvrpYecomSfDcc";
     public static String SERVICE_KEYS = "256c33bcc75b45bb95041b51bdd6fedf";
 
-    public  static  String URL = "https://ec2-35-177-219-101.eu-west-2.compute.amazonaws.com:8443";
-    public  static  String  Base_URL = "http://ec2-35-177-219-101.eu-west-2.compute.amazonaws.com:3000/";
+    public  static  String URL = "https://ec2-35-177-219-101.eu-west-2.compute.amazonaws.com:8443/";
+    public  static  String  Base_URL = "https://ec2-35-177-219-101.eu-west-2.compute.amazonaws.com:8443/?";
 
 
 

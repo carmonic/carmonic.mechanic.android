@@ -18,7 +18,7 @@ public class UserData {
 
 
     public void setPhoneNumber(String phoneNumber){
-        this.PhoneNumber =  PhoneNumber;
+        this.PhoneNumber =  phoneNumber;
     }
 
     public void setPassword(String password){
@@ -27,16 +27,16 @@ public class UserData {
 
 
     public String getFullName(){
-       return FullName;
+       return this.FullName;
     }
 
     public String getEmailAddress(){
-        return EmailAddress;
+        return this.EmailAddress;
     }
 
 
-    public String getPhoneNumber(String phoneNumber){
-      return PhoneNumber;
+    public String getPhoneNumber(){
+      return this.PhoneNumber;
     }
 
     public String getPassword(){

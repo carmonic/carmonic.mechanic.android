@@ -42,7 +42,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtinputLayName"
+        android:id="@+id/input_layout_full_name"
         android:layout_width="269dp"
         android:layout_height="0dp"
         android:layout_marginStart="52dp"
@@ -57,7 +57,7 @@
 
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtEditName"
+            android:id="@+id/txtFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/name"
@@ -67,7 +67,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtinputLayEmail"
+        android:id="@+id/input_layout_email_address"
         android:layout_width="269dp"
         android:layout_height="0dp"
         android:layout_marginStart="52dp"
@@ -80,7 +80,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtEditEmail"
+            android:id="@+id/txtEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email_address"
@@ -91,7 +91,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtinputLayPhone"
+        android:id="@+id/input_layout_phone_number"
         android:layout_width="269dp"
         android:layout_height="0dp"
         android:layout_marginStart="52dp"
@@ -104,7 +104,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtEditPhone"
+            android:id="@+id/txtPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone Number"

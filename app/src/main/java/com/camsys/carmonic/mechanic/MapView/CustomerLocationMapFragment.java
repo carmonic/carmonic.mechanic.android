@@ -343,7 +343,7 @@ public class CustomerLocationMapFragment extends Fragment implements OnMapReadyC
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
 
-                    if(Util.myClickHandler(getActivity())) {
+                    if(Util.checkConnectivity(getActivity())) {
                         Toast.makeText(getActivity(), "Internet connection available.", Toast.LENGTH_SHORT).show();
                         switch1.setText("Online");
                     }else{
@@ -351,7 +351,7 @@ public class CustomerLocationMapFragment extends Fragment implements OnMapReadyC
 
                     }
                 }else{
-                    if(Util.myClickHandler(getActivity())) {
+                    if(Util.checkConnectivity(getActivity())) {
                         Toast.makeText(getActivity(), "Internet connection available.", Toast.LENGTH_SHORT).show();
                         switch1.setText("Offline");
                     }else{

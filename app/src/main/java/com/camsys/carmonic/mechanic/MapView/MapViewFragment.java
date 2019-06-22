@@ -455,7 +455,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
 
-                    if(Util.myClickHandler(getActivity())) {
+                    if(Util.checkConnectivity(getActivity())) {
                         Toast.makeText(getActivity(), "Internet connection available.", Toast.LENGTH_SHORT).show();
                         switch1.setText("Online");
                     }else{
@@ -463,7 +463,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 
                     }
                 }else{
-                    if(Util.myClickHandler(getActivity())) {
+                    if(Util.checkConnectivity(getActivity())) {
                         Toast.makeText(getActivity(), "Internet connection available.", Toast.LENGTH_SHORT).show();
                         switch1.setText("Offline");
                     }else{

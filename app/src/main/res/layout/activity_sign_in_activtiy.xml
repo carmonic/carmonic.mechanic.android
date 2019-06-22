@@ -51,7 +51,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtinputLayEmail"
+        android:id="@+id/input_layout_email_address"
         android:layout_width="269dp"
         android:layout_height="0dp"
         android:layout_marginStart="53dp"
@@ -64,7 +64,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtEditPwd"
+            android:id="@+id/txtEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email Address"
@@ -74,7 +74,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtinputLayPwd2"
+        android:id="@+id/input_layout_password"
         android:layout_width="269dp"
         android:layout_height="0dp"
         android:layout_marginStart="48dp"
@@ -87,7 +87,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtEditPwd2"
+            android:id="@+id/txtPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
@@ -96,14 +96,16 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <TextView
         android:id="@+id/txtVwForgotPassword"
         android:layout_width="186dp"
         android:layout_height="28dp"
         android:layout_marginStart="102dp"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="500dp"
         android:text="Forgot your password?"
         android:textAlignment="center"
+        android:gravity="center"
         android:textColor="#3396BD"
         android:textSize="12dp"
         android:textStyle="bold"
@@ -123,6 +125,24 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_margin="50dp"
+        android:id="@+id/wait_icon">
+
+        <include layout="@layout/wait_icon_layout"
+            android:layout_gravity="center|center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

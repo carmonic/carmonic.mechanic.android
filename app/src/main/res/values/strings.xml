@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">carmonic</string>
+    <string name="app_name">Carmonic Mech</string>
     <string name="action_settings">Settings</string>
     <string name="carmonic">Carmonic</string>
     <string name="Register">Register</string>
@@ -93,6 +93,6 @@
         <item>Rejected</item>
         <item>Accepted</item>
     </string-array>
-
+    <string name="One_moment_please">One moment please...</string>
 
 </resources>
