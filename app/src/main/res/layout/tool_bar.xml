@@ -1,0 +1,26 @@
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@android:color/transparent"
+    app:popupTheme="@style/AppTheme.PopupOverlay">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+
+        android:id="@+id/appBackButton"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="21dp"
+        android:background="@drawable/back_arrow_yellow"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+</androidx.appcompat.widget.Toolbar>
+
+
+
+

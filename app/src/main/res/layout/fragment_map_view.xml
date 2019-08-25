@@ -120,6 +120,7 @@
 
 
 
+
             <TextView
             android:id="@+id/txtTimeToReach"
             android:layout_width="fill_parent"

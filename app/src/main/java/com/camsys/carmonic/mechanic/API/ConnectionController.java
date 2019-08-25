@@ -4,64 +4,51 @@ import com.camsys.carmonic.mechanic.Model.UserData;
 import com.camsys.carmonic.mechanic.Model.UserModel;
 import com.camsys.carmonic.mechanic.Utilities.Constants;
 import okhttp3.*;
-import okio.Buffer;
-import retrofit2.http.Query;
+
+
+import okhttp3.OkHttpClient;
+import okhttp3.OkHttpClient.Builder;
 
 import javax.net.ssl.*;
 import java.security.cert.CertificateException;
+import java.util.concurrent.TimeUnit;
 
 public class ConnectionController {
 
     //private static OkHttpClient client = new OkHttpClient();
-    private static OkHttpClient client = getUnsafeOkHttpClient();
+    public static OkHttpClient client = getUnsafeOkHttpClient();
     public static void signupMechanic(UserData userData, Callback callback) {
-        String  url  = Constants.URL + "signupMechanic";
+        String  url  = Constants.Base_URL + "signupMechanic";
 
         RequestBody requestBody = new FormBody.Builder()
                 .add("firstname", userData.getFullName())
-                .add("lastname", "Me")
+                .add("lastname", userData.getFullName())
                 .add("company", "Carmonic")
                 .add("password", userData.getPassword())
                 .add("email",userData.getEmailAddress())
                 .build();
-
         Request request = new Request.Builder()
                 .url(url)
-                .method("POST",requestBody)
-                .header("Content-Type","application/json")
+                .header("Connection","close")
+               .post(requestBody)
                 .build();
-
-        try{
-
-            final Buffer buffer = new Buffer();
-            request.body().writeTo(buffer);
-            System.out.println("----------------------------------------");
-            System.out.println("Buffer::: "+buffer.readUtf8());
-
-        }catch (Exception ex){
-            System.out.println("Buffer::: "+ex.toString());
-        }
-
-
 
         client.newCall(request).enqueue(callback);
     }
 
     public static void loginMechanic(UserData userData, Callback callback) {
-        String  url  = Constants.Base_URL + "/loginMechanic";
-
+        String  url  = Constants.Base_URL +"loginMechanic"; // "loginMechanic";
         RequestBody requestBody = new FormBody.Builder()
                 .add("email", userData.getEmailAddress())
                 .add("password", userData.getPassword())
                 .build();
-
         Request request = new Request.Builder()
                 .url(url)
+                .addHeader("Connection","close")
                 .post(requestBody)
                 .build();
 
         client.newCall(request).enqueue(callback);
-
     }
 
     //ToDo: Configure proper certificate settings when we buy one
@@ -101,7 +88,13 @@ public class ConnectionController {
                 }
             });
 
+            builder.connectTimeout(5, TimeUnit.MINUTES);
+            builder.readTimeout(5, TimeUnit.MINUTES);
+            builder.writeTimeout(5, TimeUnit.MINUTES);
+            builder.retryOnConnectionFailure(true);
+
             OkHttpClient okHttpClient = builder.build();
+
             return okHttpClient;
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -32,10 +32,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.camsys.carmonic.mechanic.API.ConnectionController;
 import com.camsys.carmonic.mechanic.Dasboard.AcceptAndDeclineFragment;
 import com.camsys.carmonic.mechanic.Dasboard.AlertDialogFragment;
 import com.camsys.carmonic.mechanic.Dasboard.CustomerDetailFragment;
 import com.camsys.carmonic.mechanic.Dasboard.OrderDetailFragment;
+import com.camsys.carmonic.mechanic.Model.UserModel;
+import com.camsys.carmonic.mechanic.Model.Users;
 import com.camsys.carmonic.mechanic.R;
 import com.camsys.carmonic.mechanic.Service.FetchAddressIntentService;
 import com.camsys.carmonic.mechanic.Utilities.Constants;
@@ -60,6 +63,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.gson.Gson;
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+import okhttp3.OkHttpClient;
+
+import java.net.URISyntaxException;
 
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback,
@@ -100,10 +110,16 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     LinearLayout mLinearLayout;
     TextView  txtOrderStatus;
     AppCompatButton btnContact;
+    private Socket socket;
+    Gson gson =  null;
+
+    String action = "";
+    String message = null;
 
 
 
-    public void showRequest(final Activity activity){
+
+    public void showRequest(final Activity activity, String message,final String customerJSON){
         final Dialog dialog =new Dialog(activity);
         dialog.setContentView(R.layout.fragment_result_dialog);
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
@@ -139,11 +155,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 
 
 
-                final AcceptAndDeclineFragment myBottomSheet = AcceptAndDeclineFragment.newInstance("", new AcceptAndDeclineFragment.MyDialogFragmentListener() {
+                final AcceptAndDeclineFragment myBottomSheet = AcceptAndDeclineFragment.newInstance(customerJSON, new AcceptAndDeclineFragment.MyDialogFragmentListener() {
                     @Override
                     public void onReturnValue(boolean indicator) {
 
                         if(indicator) {
+
+
+
 
                             ShowingAcceptRequest(getActivity());
 
@@ -261,8 +280,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             }
         });
 
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
 
 //        txtSeeDetail.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -285,46 +304,24 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     }
 
 
-    public static MapViewFragment newInstance(String columnCount) {
+    public static MapViewFragment newInstance(Intent intent) {
         MapViewFragment fragment = new MapViewFragment();
         Bundle args = new Bundle();
-        args.putString("tripId", columnCount);
+        args.putString("action", intent.getAction());
+        args.putString("message", intent.getStringExtra("message"));
+        args.putString("customerJSON",intent.getStringExtra("customerJSON"));
         fragment.setArguments(args);
         return fragment;
     }
 
 
-
-
-    public CameraPosition setWorkCamera(LatLng latlng, String address) {
-
-        if (latlng != null) {
-            MarkerOptions markerOptions = new MarkerOptions();
-            CameraPosition camera = new CameraPosition.Builder().target(latlng)
-                    .zoom(15.5f)
-                    .bearing(0)
-                    .tilt(25)
-                    .build();
-
-            return camera;
-        }
-        return null;
-
-    }
-
-    public CameraPosition setHomeCamera(LatLng latlng, String Address) {
-        if (latlng != null) {
-            CameraPosition camera = new CameraPosition.Builder().target(latlng)
-                    .zoom(15.5f)
-                    .bearing(0)
-                    .tilt(25)
-                    .build();
-            return camera;
+    private Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket("http://chat.socket.io");
+        } catch (URISyntaxException e) {
 
         }
-
-        return null;
-
     }
 
     @Override
@@ -341,7 +338,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         String showPopUp = sharedData.Get(Constants.IS_LOG_IN,null);
         mLinearLayout = (LinearLayout)rootView.findViewById(R.id.bottomContainer) ;
         mLinearLayout.setVisibility(View.GONE);
-        showRequest(getActivity());
+
 
         checkPlayService(getActivity());
         displayFirebaseRegId();
@@ -433,6 +430,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         buildGoogleApiClient();
+        gson = new Gson();
+        if (getArguments() != null && getArguments().getString("action") == Constants.SetAction.MECHANIC_REQUEST) {
+            message = getArguments().getString("message");
+            String customerJSON = getArguments().getString("customerJSON");
+
+            showRequest(getActivity(), message,customerJSON);
+        }
     }
 
 
@@ -450,29 +454,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         menu.clear();    //remove all items
         getActivity().getMenuInflater().inflate(R.menu.main, menu);
         switch1= (Switch)menu.findItem(R.id.myswitch).getActionView().findViewById(R.id.switchAB);
-        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-
-                    if(Util.checkConnectivity(getActivity())) {
-                        Toast.makeText(getActivity(), "Internet connection available.", Toast.LENGTH_SHORT).show();
-                        switch1.setText("Online");
-                    }else{
-                        Toast.makeText(getActivity(), "No internet connection available.", Toast.LENGTH_SHORT).show();
-
-                    }
-                }else{
-                    if(Util.checkConnectivity(getActivity())) {
-                        Toast.makeText(getActivity(), "Internet connection available.", Toast.LENGTH_SHORT).show();
-                        switch1.setText("Offline");
-                    }else{
-                        Toast.makeText(getActivity(), "No internet connection available.", Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-            }
-        });
+        switch1.setVisibility(View.INVISIBLE);
 
     }
 
@@ -557,7 +539,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
                 mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-                startIntentService(mLastLocation);
+              //  startIntentService(mLastLocation);
 
                 //initCamera(mLastLocation);
             } else {
@@ -581,7 +563,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
             mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-            startIntentService(mLastLocation);
+           // startIntentService(mLastLocation);
         }
 
 
@@ -604,6 +586,11 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 
                     startIntentService(mLocation);
 
+                    try{
+                        socketLocationUpdate(mLocation);
+                    }catch (Exception ex){
+                       ex.printStackTrace();
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -642,6 +629,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 // changeMap(mLastLocation);
                 initCamera(mLastLocation);
                 Log.d("TAG", "ON connected");
+                Toast.makeText(getActivity(),"Longitude = " +mLastLocation.getLongitude()+ " Latyitude = " + mLastLocation.getLatitude() + "" ,Toast.LENGTH_LONG).show();
+                startIntentService(mLastLocation);
+                socketLocationUpdate(mLastLocation);
 
             } else
                 try {
@@ -653,11 +643,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 }
             try {
                 mLocationRequest = new LocationRequest();
-                mLocationRequest.setInterval(10000);
-                mLocationRequest.setFastestInterval(5000);
+                mLocationRequest.setInterval(60000);
+                mLocationRequest.setFastestInterval(10000);
                 mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                 LocationServices.FusedLocationApi.requestLocationUpdates(
                         mGoogleApiClient, mLocationRequest, this);
+                Toast.makeText(getActivity(),"Longitude = " +mLastLocation.getLongitude()+ " Latyitude = " + mLastLocation.getLatitude() + "" ,Toast.LENGTH_LONG).show();
+                startIntentService(mLastLocation);
+                socketLocationUpdate(mLastLocation);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -681,7 +674,11 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     public void onLocationChanged(Location location) {
         mLastLocation = location;
         initCamera(mLastLocation);
-
+//        if(mLastLocation != null){
+//            socketLocationUpdate(mLastLocation);
+//            Toast.makeText(getActivity(),"Longitude = " +mLastLocation.getLongitude()+ " Latyitude = " + mLastLocation.getLatitude() + "" ,Toast.LENGTH_LONG).show();
+//
+//        }
 
     }
 
@@ -692,14 +689,17 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
      */
     protected void startIntentService(Location mLocation) {
         // Create an intent for passing to the intent service responsible for fetching the address.
-        Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
-        intent.putExtra(Constants.LocationConstants.RECEIVER, mResultReceiver);
-        intent.putExtra(Constants.LocationConstants.LOCATION_DATA_EXTRA, mLocation);
-        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::");
-        System.out.println(":::::::About:::to:::call:::the:::service:::::::::");
-        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::");
-        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::");
-        getActivity().startService(intent);
+     try{
+
+         Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
+         intent.putExtra(Constants.LocationConstants.RECEIVER, mResultReceiver);
+         intent.putExtra(Constants.LocationConstants.LOCATION_DATA_EXTRA, mLocation);
+         getActivity().startService(intent);
+
+     }catch (Exception  ex ){
+        System.out.println(ex.toString());
+     }
+
     }
 
     private void checkLocationPermission() {
@@ -791,7 +791,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         mGoogleMap.setMapType(Constants.MAP_TYPES[1]);
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
-        // startIntentService(location);
+        //startIntentService(location);
     }
 
     protected Marker createMarker(double latitude, double longitude, String title, String snippet) {
@@ -921,14 +921,16 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     /**
      * Updates the address in the UI.
      */
-    protected void displayAddressOutput() {
-        try {
-            if (mAreaOutput != null)
-                txtMyLocation.setText(mAddressOutput);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    protected void displayAddressOutput() {
+//        try {
+//
+//                txtMyLocation.setText("");
+//                txtMyLocation.setText(mAddressOutput);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public void onReturnValue(boolean indicator) {
@@ -949,27 +951,42 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
          */
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
-
             // Display the address string or an error message sent from the intent service.
             mAddressOutput = resultData.getString(Constants.LocationConstants.RESULT_DATA_KEY);
-
             mAreaOutput = resultData.getString(Constants.LocationConstants.LOCATION_DATA_AREA);
-
             mCityOutput = resultData.getString(Constants.LocationConstants.LOCATION_DATA_CITY);
             mStateOutput = resultData.getString(Constants.LocationConstants.LOCATION_DATA_STREET);
-
-            displayAddressOutput();
-
             // Show a toast message if an address was found.
             if (resultCode == Constants.LocationConstants.SUCCESS_RESULT) {
-                //  showToast(getString(R.string.address_found));
-
-
+                txtMyLocation.setText(mStateOutput);
             }
-
-
         }
+    }
 
+
+    private void socketLocationUpdate(Location mLastLocation) {
+        try {
+
+            Users mechanic = Util.GetUserObjectFromJson(getActivity());
+            mechanic.setLatitude(mLastLocation.getLatitude() + "");
+            mechanic.setLongitude(mLastLocation.getLongitude() + "");
+
+
+            OkHttpClient okHttpClient = ConnectionController.client;
+            IO.setDefaultOkHttpWebSocketFactory(okHttpClient);
+            IO.setDefaultOkHttpCallFactory(okHttpClient);
+            IO.Options opts = new IO.Options();
+            opts.callFactory = okHttpClient;
+            opts.webSocketFactory = okHttpClient;
+            socket = IO.socket(Constants.Base_URL, opts);
+            socket.connect();
+            System.out.println("After - Emit" + gson.toJson(mechanic));
+            socket.emit(Constants.MECHANIC_UPDATE_LOCATION, gson.toJson(mechanic));
+
+
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
 

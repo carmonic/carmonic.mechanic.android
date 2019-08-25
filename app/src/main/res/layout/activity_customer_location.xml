@@ -195,11 +195,9 @@
                                 app:srcCompat="@drawable/ic_edit_location" />
 
 
-
                         </LinearLayout>
 
                         <LinearLayout
-
                             android:layout_gravity="center"
                             android:layout_weight="80"
                             android:layout_height="wrap_content"
@@ -207,7 +205,6 @@
                             android:orientation="vertical"
                             android:gravity="center"
                             android:paddingLeft="5dp">
-
 
 
                             <TextView
@@ -252,7 +249,7 @@
                >
 
                 <ImageView
- android:id="@+id/book"
+                    android:id="@+id/book"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/nav_header_desc"
@@ -288,8 +285,6 @@
             android:src="@drawable/user"
             app:civ_border_color="@color/nav_pic_border_dark"
             app:civ_border_width="1dp" />
-
-
 
 
         <LinearLayout
@@ -382,11 +377,7 @@
             android:textStyle="normal" />
 
 
-
-
     </RelativeLayout>
-
-
 </RelativeLayout>
 
     </LinearLayout>

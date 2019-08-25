@@ -15,10 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.camsys.carmonic.mechanic.MainActivity;
+import com.camsys.carmonic.mechanic.Model.Customer;
 import com.camsys.carmonic.mechanic.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.gson.Gson;
 
 public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
 
@@ -29,9 +31,16 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
     Button btnDecline =  null;
     TextView cancel_action= null;
     TextView txtTimer =  null;
+
+    TextView txtCustomerName;
+    TextView txtRating;
+    TextView txtDescription;
+
+
     MyDialogFragmentListener listener =  null;
     int minute;
     long min;
+    Gson gson  =  null;
 
 
 
@@ -54,7 +63,7 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mString = getArguments().getString("string");
-
+        gson =  new Gson();
 
 
     }
@@ -78,6 +87,7 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
         params.height = getScreenHeight();
         linearLayout.setLayoutParams(params);
 
+        Customer customer = gson.fromJson(mString,Customer.class);
 
         txtTimer = (TextView) dialog.findViewById(R.id.txtTimer);
         btnAccept = (Button) dialog.findViewById(R.id.btnAccept);
@@ -85,6 +95,15 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
         cancel_action = (TextView) dialog.findViewById(R.id.cancel_action);
 
 
+        txtCustomerName =  (TextView) dialog.findViewById(R.id.txtCustomerName);
+        txtDescription = (TextView)dialog.findViewById(R.id.txtDescription);
+        txtRating = (TextView) dialog.findViewById(R.id.txtRating);
+
+        txtCustomerName.setText(customer.getFirstname());
+       // txtDescription.setText(customer.);
+       String txtDesc =  txtDescription.getText().toString().replace("XXXX",customer.getFirstname()).replace("YYYY","10Km");
+
+        txtDescription.setText(txtDesc);
         cancel_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

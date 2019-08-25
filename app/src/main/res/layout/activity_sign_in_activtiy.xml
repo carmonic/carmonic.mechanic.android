@@ -22,109 +22,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/txtVwScreen2Hdr"
-        android:layout_width="184dp"
-        android:layout_height="83dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="104dp"
-        android:fontFamily="@fonts/GlacialIndifferenceBold"
-        android:lineSpacingExtra="16sp"
-
-        android:text="Hello! \nWelcome Back."
-        android:textColor="#EDD170"
-        android:textSize="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtVwScreen2SubTitle"
-        android:layout_width="350dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="212dp"
-        android:fontFamily="@fonts/GlacialIndifferenceRegular"
-        android:text="Sign into your account"
-        android:textColor="#B9B9B9"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_email_address"
-        android:layout_width="269dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="53dp"
-        android:layout_marginTop="312dp"
-        android:orientation="horizontal"
-        android:paddingBottom="1dp"
-        app:hintTextAppearance="@style/txtLabel"
-        android:theme="@style/splash_textinputlayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtEmailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email Address"
-            android:inputType="textEmailAddress"
-             />
-    </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_password"
-        android:layout_width="269dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="385dp"
-        android:orientation="horizontal"
-        android:paddingBottom="1dp"
-        app:hintTextAppearance="@style/txtLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        android:theme="@style/splash_textinputlayout"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:inputType="textPassword"
-             />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <TextView
-        android:id="@+id/txtVwForgotPassword"
-        android:layout_width="186dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="102dp"
-        android:layout_marginTop="500dp"
-        android:text="Forgot your password?"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:textColor="#3396BD"
-        android:textSize="12dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <Button
-        android:id="@+id/btnSubmit"
-        style="@style/home_page_button"
-        android:layout_width="99dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="48dp"
-        android:background="@drawable/register_button"
-        android:text="@string/Submit"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:id="@+id/signlayout">
+
+        <include layout="@layout/sign_in_layout" />
+
+    </LinearLayout>
+
+
+
 
 
 

@@ -75,7 +75,7 @@ public class test extends AppCompatActivity
 
     public void loadFragment() {
 
-        Fragment fragment = MapViewFragment.newInstance("");     //new MapViewFragment(TripReq);
+        Fragment fragment = MapViewFragment.newInstance(getIntent());     //new MapViewFragment(TripReq);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.mapFrame, fragment);
         ft.commit();

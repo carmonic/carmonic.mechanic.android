@@ -9,9 +9,7 @@
     android:background="@drawable/grad_hom"
 
     >
-    <!--  android:background="@drawable/scrn1bgx1"       android:background="#003D73"-->
 
-    <!-- -->
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/backbutton"
@@ -20,20 +18,27 @@
         android:layout_marginStart="21dp"
         android:layout_marginTop="60dp"
         android:background="@drawable/back_arrow_yellow"
-        android:onClick="onclick_back"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        android:id="@+id/infoPanel">
 
-        <include layout="@layout/content_sign_up" />
 
-    </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            android:id="@+id/infoPanel">
+
+            <include layout="@layout/content_sign_up" />
+
+        </LinearLayout>
+
+
+
+
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,6 +54,9 @@
         android:visibility="visible" />
 
     </LinearLayout>
+
+
+
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

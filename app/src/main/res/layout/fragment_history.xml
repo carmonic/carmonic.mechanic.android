@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="4dp"
+    android:orientation="vertical"
+    android:background="@drawable/grad_hom"
+    tools:ignore="UnusedAttribute">
+
+    <LinearLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+            <RelativeLayout
+                android:id="@+id/infoPanel"
+                android:layout_below="@+id/cancel_action"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="60dp"
+                android:orientation="vertical"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="History"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/colorYellow"
+                    android:textSize="24dp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/txtDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/title"
+                    android:text="Here’s a list of your past requests "
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/dialog_text"
+                    android:textSize="15dp"
+                    android:textStyle="normal" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list"
+                    android:name="com.app.piggyclone.Dashboard.HomeFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_below="@+id/txtDesc"
+                    android:layout_gravity="center"
+                    >
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+
+
+
+
+
+
+            </RelativeLayout>
+
+
+
+
+    </LinearLayout>
+</LinearLayout>

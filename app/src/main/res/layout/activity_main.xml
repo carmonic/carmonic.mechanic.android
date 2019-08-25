@@ -23,7 +23,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:itemIconTint="@color/colorYellow"
-        app:headerLayout="@layout/nav_header"
         android:background="@color/colorPrimaryDark"
         app:theme="@style/drawer_theme"
         app:menu="@menu/activity_dashboard_drawer"

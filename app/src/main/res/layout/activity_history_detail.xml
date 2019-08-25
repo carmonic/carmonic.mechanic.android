@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="4dp"
+    android:orientation="vertical"
+    android:background="@drawable/grad_hom"
+    tools:ignore="UnusedAttribute">
+
+
+    <androidx.appcompat.widget.AppCompatImageButton
+
+    android:id="@+id/appBackButton"
+    android:layout_width="16dp"
+    android:layout_height="16dp"
+    android:layout_marginStart="21dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+    android:background="@drawable/back_arrow_yellow"
+    android:visibility="visible"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+    <!--<androidx.appcompat.widget.Toolbar-->
+        <!--android:id="@+id/my_toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--android:elevation="4dp"-->
+        <!--/>-->
+
+    <!--<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
+
+        <!--<androidx.appcompat.widget.AppCompatImageButton-->
+
+            <!--android:id="@+id/appBackButton"-->
+            <!--android:layout_width="16dp"-->
+            <!--android:layout_height="16dp"-->
+            <!--android:layout_marginStart="21dp"-->
+            <!--android:background="@drawable/back_arrow_yellow"-->
+            <!--android:visibility="visible"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent"/>-->
+
+
+
+    <!--</androidx.appcompat.widget.Toolbar>-->
+
+
+
+
+
+    <!--<androidx.appcompat.widget.AppCompatImageButton-->
+
+        <!--android:id="@+id/appBackButton"-->
+        <!--android:layout_width="16dp"-->
+        <!--android:layout_height="16dp"-->
+        <!--android:layout_marginStart="21dp"-->
+        <!--android:layout_marginTop="40dp"-->
+        <!--android:background="@drawable/back_arrow_yellow"-->
+        <!--android:visibility="visible"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"/>-->
+
+
+
+
+
+
+        <ScrollView
+            android:id="@+id/coordinatorLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="March 24, 2018"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorYellow"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+
+                <RelativeLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginRight="26dp"
+                    android:background="@drawable/dr_billing_top"
+                    android:padding="10dp"
+                   >
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/item_picture"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/user"
+                        android:layout_centerInParent="false"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_centerInParent="false"
+                        android:layout_toEndOf="@+id/item_picture"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="March 24, 2017, 1:20pm"
+                            android:textColor="@color/colorYellow"
+                            android:id="@+id/txtItemDate"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="Request with Sanni"
+                            android:textColor="@color/colorYellow"
+                            android:id="@+id/txtItemRequester" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="#6,500"
+                            android:textColor="@color/colorYellow"
+                            android:id="@+id/txtAmount" />
+
+
+
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:gravity="left"
+                            android:layout_toEndOf="@+id/user_picture"
+                            >
+
+                            <ImageView
+                                android:id="@+id/start1"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:visibility="visible"
+                                android:src="@android:drawable/star_off" />
+
+                            <ImageView
+                                android:id="@+id/start2"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:visibility="gone"
+                                android:src="@android:drawable/star_off" />
+
+                            <ImageView
+                                android:id="@+id/start3"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:visibility="gone"
+                                android:src="@android:drawable/star_off" />
+
+                            <ImageView
+                                android:id="@+id/start4"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:visibility="gone"
+                                android:src="@android:drawable/star_off" />
+
+                            <ImageView
+                                android:id="@+id/start5"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:visibility="gone"
+                                android:src="@android:drawable/star_off" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+
+
+
+                </RelativeLayout>
+
+
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="192dp"
+                    android:background="@drawable/dr_billing_top"
+                    android:layout_margin="26dp"
+                    android:gravity="center|top"
+                    android:orientation="vertical">
+
+
+
+
+                    <TextView
+                        android:id="@+id/txtBillHeader1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="Bill Breakdown"
+                        android:textColor="@color/colorYellow"
+                        android:textSize="17dp"
+                        android:textStyle="bold" />
+
+
+
+                    <RelativeLayout
+                        android:id="@+id/baseFareContainer1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtBillHeader"
+                        android:layout_margin="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtBaseFareHeader1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Base fare:"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/dialog_text"
+                            android:textSize="17dp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtBaseFare1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentRight="true"
+                            android:text="N300"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/baseFareContainer21"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/baseFareContainer"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtBaseFareHeader11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Calculated fare:"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/dialog_text"
+                            android:textSize="17dp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtBaseFare11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentRight="true"
+                            android:text="N600"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/baseFareContainer31"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/baseFareContainer"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtBaseFareHeader211"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Total fare:"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/dialog_text"
+                            android:textSize="17dp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtBaseFare211"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentRight="true"
+                            android:text="N900"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="192dp"
+                    android:background="@drawable/dr_billing_top"
+                    android:layout_margin="26dp"
+                    android:gravity="center|top"
+                    android:orientation="vertical">
+
+
+
+
+                    <TextView
+                        android:id="@+id/txtBillHeader234"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="Bill Breakdown"
+                        android:textColor="@color/colorYellow"
+                        android:textSize="17dp"
+                        android:textStyle="bold" />
+
+
+
+                    <RelativeLayout
+                        android:id="@+id/baseFareContainer234"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtBillHeader"
+                        android:layout_margin="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtBaseFareHeader234"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Base fare:"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/dialog_text"
+                            android:textSize="17dp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtBaseFare234"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentRight="true"
+                            android:text="N300"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/baseFareContainer234"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/baseFareContainer"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtBaseFareHeader1345"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Calculated fare:"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/dialog_text"
+                            android:textSize="17dp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtBaseFare1345"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentRight="true"
+                            android:text="N600"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/baseFareContainer345"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/baseFareContainer"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtBaseFareHeader2345"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Total fare:"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/dialog_text"
+                            android:textSize="17dp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtBaseFare2345"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentRight="true"
+                            android:text="N900"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="192dp"
+                    android:background="@drawable/dr_billing_top"
+                    android:layout_margin="26dp"
+                    android:gravity="center|top"
+                    android:orientation="vertical">
+
+
+
+
+                    <TextView
+                        android:id="@+id/txtBillHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="Bill Breakdown"
+                        android:textColor="@color/colorYellow"
+                        android:textSize="17dp"
+                        android:textStyle="bold" />
+
+
+
+                    <RelativeLayout
+                        android:id="@+id/baseFareContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtBillHeader"
+                        android:layout_margin="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtBaseFareHeader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Base fare:"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/dialog_text"
+                            android:textSize="17dp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtBaseFare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentRight="true"
+                            android:text="N300"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/baseFareContainer2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/baseFareContainer"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtBaseFareHeader1234"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Calculated fare:"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/dialog_text"
+                            android:textSize="17dp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtBaseFare1234"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentRight="true"
+                            android:text="N600"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/baseFareContainer3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/baseFareContainer"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtBaseFareHeader2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Total fare:"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/dialog_text"
+                            android:textSize="17dp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/txtBaseFare2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentRight="true"
+                            android:text="N900"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+</LinearLayout>
