@@ -93,9 +93,11 @@ public class TestService extends Service  {
 
                final String  customerJSON  = gson.toJson(customer);
 
-                NotificationUtil notificationUtil = new NotificationUtil(getApplicationContext(),customerJSON);
-                notificationUtil.showNotificationMessage(" Carmonic","A customer needs your help 5km away from your location","","");
+//                NotificationUtil notificationUtil = new NotificationUtil(getApplicationContext(),customerJSON);
+//                notificationUtil.showNotificationMessage(" Carmonic","A customer needs your help 5km away from your location","","");
 
+                System.out.println("About to pick a  request");
+                System.out.println("===================Me and  You============================");
                 try{
 
                     OkHttpClient okHttpClient = ConnectionController.client;
@@ -110,19 +112,24 @@ public class TestService extends Service  {
                         public void call(Object... args) {
 
                             System.out.println("A customer needs your help 5km away from your location");
-
+                            System.out.println("======================================================");
+                            System.out.println("====================Inside a request==================================");
+                            System.out.println("======================================================");
+                            System.out.println("======================================================");
+                            System.out.println("A customer needs your help 5km away from your location");
                             Gson gson  =  new Gson();
                             JSONObject jsonObject = (JSONObject) args[0];
 
                             Toast.makeText(getApplicationContext(),args[0] + "",Toast.LENGTH_LONG).show();
-                            NotificationUtil notificationUtil = new NotificationUtil(getApplicationContext(),customerJSON);
-                            notificationUtil.showNotificationMessage(" Carmonic","A customer needs your help 5km away from your location","","");
+//                            NotificationUtil notificationUtil = new NotificationUtil(getApplicationContext(),customerJSON);
+//                            notificationUtil.showNotificationMessage(" Carmonic","A customer needs your help 5km away from your location","","");
 
                         }
                     });
                     socket.connect();
                 } catch (URISyntaxException e) {
 
+                    System.out.println("Exception:::::::::");
                     Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
