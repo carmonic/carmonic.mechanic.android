@@ -566,7 +566,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
            // startIntentService(mLastLocation);
         }
 
-
+        setupSocket();
 
 
        mGoogleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
@@ -984,6 +984,43 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             socket.emit(Constants.MECHANIC_UPDATE_LOCATION, gson.toJson(mechanic));
 
 
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setupSocket() {
+        try {
+            OkHttpClient okHttpClient = ConnectionController.client;
+
+            IO.setDefaultOkHttpWebSocketFactory(okHttpClient);
+            IO.setDefaultOkHttpCallFactory(okHttpClient);
+
+            IO.Options opts = new IO.Options();
+            opts.callFactory = okHttpClient;
+            opts.webSocketFactory = okHttpClient;
+
+            socket = IO.socket(Constants.Base_URL, opts);
+            /*
+             * EVENT_CONNECT is emitted by the back end as soon as you connect to the socket. On the back end we use "mechanic_register" to register the mechanic as online so emit it here.
+             * EVENT_DISCONNECT emitted by the back end when you disconnect from the socket. This can happen if the app is closed (ie not running in the background) or killed. No need to emit anything in this case
+             */
+            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    Users mechanic = Util.GetUserObjectFromJson(getActivity());
+                    socket.emit("mechanic_register", gson.toJson(mechanic));
+                }
+
+            }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                }
+
+            });
+            socket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
