@@ -64,6 +64,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -1011,6 +1014,20 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 public void call(Object... args) {
                     Users mechanic = Util.GetUserObjectFromJson(getActivity());
                     socket.emit("mechanic_register", gson.toJson(mechanic));
+                }
+
+            }).on("job_req", new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    JSONObject jsonMechanic = (JSONObject) args[0];
+                    Users mechanic = gson.fromJson(jsonMechanic.toString(), Users.class);
+                    JSONObject jsonCustomer = (JSONObject) args[1];
+                    Users customer = gson.fromJson(jsonCustomer.toString(), Users.class);
+
+                    System.out.println("Received job request");
+
+                    //Notify the mechanic
                 }
 
             }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
