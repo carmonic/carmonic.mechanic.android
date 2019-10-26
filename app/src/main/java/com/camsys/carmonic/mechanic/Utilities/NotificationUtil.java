@@ -124,7 +124,7 @@ public class NotificationUtil {
                 + "://" + mContext.getPackageName() + "/raw/notification");
 
         showSmallNotification(mBuilder, title, icon, message, timeStamp, resultPendingIntent, alarmSound,GROUP_KEY);
-        playNotificationSound();
+       // playNotificationSound();
 
     }
 

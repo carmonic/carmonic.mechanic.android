@@ -6,6 +6,7 @@ import android.app.Dialog;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.location.Location;
 import android.os.Bundle;
 
 import android.os.CountDownTimer;
@@ -16,7 +17,9 @@ import androidx.annotation.Nullable;
 
 import com.camsys.carmonic.mechanic.MainActivity;
 import com.camsys.carmonic.mechanic.Model.Customer;
+import com.camsys.carmonic.mechanic.Model.Users;
 import com.camsys.carmonic.mechanic.R;
+import com.camsys.carmonic.mechanic.Utilities.Util;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -41,15 +44,19 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
     int minute;
     long min;
     Gson gson  =  null;
+    Location mLastLocation =  null;
+    double userLat,userLong;
 
 
 
 
 
-    public static AcceptAndDeclineFragment newInstance(String string,  MyDialogFragmentListener listener) {
+    public static AcceptAndDeclineFragment newInstance(String string,double userLat,double userLong, MyDialogFragmentListener listener) {
         AcceptAndDeclineFragment f = new AcceptAndDeclineFragment(listener);
         Bundle args = new Bundle();
         args.putString("string", string);
+        args.putDouble("userLat",userLat);
+        args.putDouble("userLong",userLong);
 
         f.setArguments(args);
         return f;
@@ -63,6 +70,8 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mString = getArguments().getString("string");
+        userLat = getArguments().getDouble("userLat");
+        userLong = getArguments().getDouble("userLong");
         gson =  new Gson();
 
 
@@ -87,7 +96,13 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
         params.height = getScreenHeight();
         linearLayout.setLayoutParams(params);
 
-        Customer customer = gson.fromJson(mString,Customer.class);
+        //Customer customer1 = gson.fromJson(mString,Customer.class);
+        Users customer = gson.fromJson(mString, Users.class);
+
+
+
+        double distance  =  Util.distance(customer.getLatitude(),customer.getLongitude(),userLat,userLong);
+
 
         txtTimer = (TextView) dialog.findViewById(R.id.txtTimer);
         btnAccept = (Button) dialog.findViewById(R.id.btnAccept);
@@ -101,7 +116,7 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
 
         txtCustomerName.setText(customer.getFirstname());
        // txtDescription.setText(customer.);
-       String txtDesc =  txtDescription.getText().toString().replace("XXXX",customer.getFirstname()).replace("YYYY","10Km");
+       String txtDesc =  txtDescription.getText().toString().replace("XXXX",customer.getFirstname()).replace("YYYY",Math.round(distance)+"");
 
         txtDescription.setText(txtDesc);
         cancel_action.setOnClickListener(new View.OnClickListener() {
@@ -129,22 +144,13 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
             }
         });
 
-//        new CountDownTimer(30000, 1000) {
-//
-//            public void onTick(long millisUntilFinished) {
-//                txtTimer.setText(millisUntilFinished / 1000 + "Minute");
-//                //here you can have your logic to set text to edittext
-//            }
-//
-//            public void onFinish() {
-//                //txtTimer.setText("done!");
-//            }
-//
-//        }.start();
 
-        //minute=Integer.parseInt(10);
         min= 10*60*1000;
         counter(min,dialog);
+        if(min == 0){
+
+            dismiss();
+        }
 
         mBehavior = BottomSheetBehavior.from((View) view.getParent());
         return dialog;

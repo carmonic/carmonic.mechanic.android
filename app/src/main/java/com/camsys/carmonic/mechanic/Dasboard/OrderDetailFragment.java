@@ -12,10 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.camsys.carmonic.mechanic.Model.Users;
 import com.camsys.carmonic.mechanic.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.gson.Gson;
 
 public class OrderDetailFragment extends BottomSheetDialogFragment {
 
@@ -30,7 +33,8 @@ public class OrderDetailFragment extends BottomSheetDialogFragment {
     int minute;
     long min;
 
-
+    Gson  gson = null;
+    Users user   = null;
 
 
 
@@ -51,8 +55,11 @@ public class OrderDetailFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mString = getArguments().getString("string");
-
-
+        gson  =  new Gson();
+        user = gson.fromJson(mString, Users.class);
+        if(user == null){
+            dismiss();
+        }
 
     }
 

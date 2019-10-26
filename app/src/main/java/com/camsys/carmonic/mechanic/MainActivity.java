@@ -29,6 +29,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.camsys.carmonic.mechanic.Account.AccountFragment;
 import com.camsys.carmonic.mechanic.Help.HelpFragment;
@@ -197,16 +198,55 @@ System.out.println("===getACtion====" + getIntent().getAction());
 
 
     }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
+
+        //check if home fragment is at top
+        //if not, show home fragment
+        //if yes, allow to close
+
+        boolean showHome = true;
+
+        try {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            List<Fragment> fragmentList = fragmentManager.getFragments();
+            for (Fragment fragment : fragmentList) {
+                if (fragment != null && fragment.isVisible()) {
+                    if (fragment instanceof MapViewFragment) {
+                        showHome = false;
+                    } else if (fragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
+                        //popchildbackstack
+                        fragment.getChildFragmentManager().popBackStackImmediate();
+                        return;
+                    }
+                }
+            }
+
+            if (showHome) {
+                //check if there are pending reverse actions on activity
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    showHome = false;
+                }
+            } else {
+
+                Toast.makeText(this, "Back", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+        }
+
+//        if (showHome) {
+//            displayDrawerItem(R.id.nav_dashboard);
+//            return;
+//        }
+
+        //   super.onBackPressed();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -358,37 +398,23 @@ System.out.println("===getACtion====" + getIntent().getAction());
 
     }
 
+    protected OnBackPressedListener onBackPressedListener;
 
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        mMap = googleMap;
-//
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-//    }
+    public interface OnBackPressedListener {
+        void doBack();
+    }
 
-//    @Override
-//    public void onBackPressed() {
-//
-//        List fragmentList = getSupportFragmentManager().getFragments();
-//
-//        boolean handled = false;
-//        for(Fragment f : fragmentList) {
-//            if(f instanceof BaseFragment) {
-//                handled = ((BaseFragment)f).onBackPressed();
-//
-//                if(handled) {
-//                    break;
-//                }
-//            }
-//        }
-//
-//        if(!handled) {
-//            super.onBackPressed();
-//        }
-//    }
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        onBackPressedListener = null;
+        super.onDestroy();
+    }
 
 
 }

@@ -14,10 +14,10 @@ public class Constants {
     public static String SERVICE_KEYS = "256c33bcc75b45bb95041b51bdd6fedf";
 //192.168.43.237
 
-    public  static  String URL =  "https://ec2-35-177-219-101.eu-west-2.compute.amazonaws.com:8443/";
-    public  static  String  Base_URL = "https://192.168.43.237:8443/";// "https://ec2-35-177-219-101.eu-west-2.compute.amazonaws.com:8443/";
+    public  static  String URL = "https://192.168.43.237:8443/";// "https://ec2-35-177-219-101.eu-west-2.compute.amazonaws.com:8443/";
+    public  static  String  Base_URL =  "https://192.168.43.237:8443";// "https://ec2-35-177-219-101.eu-west-2.compute.amazonaws.com:8443/";
 
-
+//"https://192.168.43.237:8443/";//
 
     // id to handle the notification in the notification tray
     public static final int NOTIFICATION_ID = 100;
@@ -42,11 +42,13 @@ public class Constants {
     public  static final String Get_Mechanic_Request = "";
     public  static final String MECHANIC_UPDATE_LOCATION = "mechanic_update_location";
 
-    public  static final String CUSTOMER_REQUEST = "job_request";
-    public  static  final String mechanic_accept_job = "mechanic_accept_job";
+    public  static final String CUSTOMER_REQUEST = "job_req";
+    public  static  final String MECHANIC_ACCEPT_JOB = "mechanic_accept_job";
+    public  static  final String  MECHANIC_REJECT_JOB = "mechanic_reject_job";
 
 
     public class LocationConstants {
+
         public static final int SUCCESS_RESULT = 0;
         public static final int FAILURE_RESULT = 1;
         public static final String PACKAGE_NAME = "com.camsys.carmonic.mechanic";

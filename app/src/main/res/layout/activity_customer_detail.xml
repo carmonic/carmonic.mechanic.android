@@ -18,12 +18,12 @@
 
 
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
     android:id="@+id/coordinatorLayout2"
     android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:gravity="top"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     android:background="@drawable/grad_hom"
     >
@@ -34,23 +34,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="21dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="left"
         android:text="X"
         android:textColor="@color/colorYellow"
         android:textStyle="normal"
         android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+       />
 
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/infoPanel"
         android:layout_below="@+id/cancel_action"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
         android:orientation="vertical"
+        android:layout_margin="20dp"
         android:visibility="visible"
+        android:layout_gravity="top"
+        android:gravity="top|center"
        >
 
 
@@ -178,12 +180,12 @@
         <RelativeLayout
             android:id="@+id/relativeLayout1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_below="@+id/txtTimer"
             android:layout_gravity="bottom"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="40dp"
+            android:gravity = "bottom"
             android:background="@android:color/transparent"
-            android:gravity="bottom"
             android:padding="5dp">
 
             <Button
@@ -213,11 +215,11 @@
         </RelativeLayout>
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
 
 
     </LinearLayout>

@@ -12,10 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.camsys.carmonic.mechanic.Model.Users;
 import com.camsys.carmonic.mechanic.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.gson.Gson;
 
 public class CustomerDetailFragment extends BottomSheetDialogFragment {
 
@@ -24,6 +27,15 @@ public class CustomerDetailFragment extends BottomSheetDialogFragment {
 
     ImageView cancel_action= null;
     ImageView imgBook = null;
+    Gson gson =  null;
+    Users user = null;
+
+    TextView txtSourceLocation;
+    TextView txtDestinationLocation;
+    TextView txtCustomerName;
+    TextView  txtExtraNote;
+    TextView txtNote;
+
 
     public static CustomerDetailFragment newInstance(String string) {
         CustomerDetailFragment f = new CustomerDetailFragment();
@@ -37,6 +49,11 @@ public class CustomerDetailFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mString = getArguments().getString("string");
+        gson  =  new Gson();
+        user = gson.fromJson(mString,Users.class);
+        if(user == null){
+            dismiss();
+        }
 
     }
 
@@ -59,7 +76,13 @@ public class CustomerDetailFragment extends BottomSheetDialogFragment {
         params.height = getScreenHeight();
         linearLayout.setLayoutParams(params);
 
+       txtCustomerName =  (TextView) dialog.findViewById(R.id.txtCustomerName);
+       txtDestinationLocation = (TextView)dialog.findViewById(R.id.txtCustomerLocation);
+       txtSourceLocation = (TextView)dialog.findViewById(R.id.txtSourceLocation);
+       txtExtraNote = (TextView)dialog.findViewById(R.id.txtExtraNote);
+       txtNote = (TextView)dialog.findViewById(R.id.txtNote);
 
+       txtCustomerName.setText(user.getFirstname());
 
 
         cancel_action = (ImageView) dialog.findViewById(R.id.close);

@@ -11,6 +11,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.*;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.media.ExifInterface;
 import android.media.FaceDetector;
 import android.net.ConnectivityManager;
@@ -48,6 +51,7 @@ import com.camsys.carmonic.mechanic.Model.UserModel;
 import com.camsys.carmonic.mechanic.Model.Users;
 import com.camsys.carmonic.mechanic.R;
 import com.google.android.gms.location.ActivityTransition;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import org.json.JSONObject;
 
@@ -66,6 +70,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javax.crypto.Mac;
@@ -1335,11 +1340,78 @@ public class Util {
     }
 
 
-
+    public static String GetUserJson(Context activity){
+        SharedData sharedData =  new SharedData(activity);
+        Gson gson  =  new Gson();
+        return  sharedData.Get(Constants.USER_KEY,"");
+    }
     public static Users GetUserObjectFromJson(Activity activity){
         SharedData sharedData =  new SharedData(activity);
         Gson gson  =  new Gson();
         Users user = gson.fromJson(sharedData.Get(Constants.USER_KEY,""),Users.class);
         return  user;
+    }
+
+
+    private  static double  deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private static double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
+
+
+    public static double distance(double customerLatitude, double customerLongitude, double destinationLatitude, double destinationLongitude) {
+        double theta = customerLongitude - destinationLongitude;
+        double dist = Math.sin(deg2rad(customerLatitude))
+                * Math.sin(deg2rad(destinationLatitude))
+                + Math.cos(deg2rad(customerLatitude))
+                * Math.cos(deg2rad(destinationLatitude))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = (dist * 60 * 1.1515)/0.62137;
+        return (dist);
+    }
+
+
+    public static double distance(LatLng start, LatLng end){
+        try {
+            Location location1 = new Location("locationA");
+            location1.setLatitude(start.latitude);
+            location1.setLongitude(start.longitude);
+            Location location2 = new Location("locationB");
+            location2.setLatitude(end.latitude);
+            location2.setLongitude(end.longitude);
+            double distance = location1.distanceTo(location2);
+            return distance;
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+        return 0;
+    }
+
+
+    public  static   String  GetAddressFromLatLong(Context contxt,double latitude,double longitude){
+        Geocoder geocoder = new Geocoder(contxt, Locale.getDefault());
+        List<Address> addresses;
+        try{
+
+            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+//            String city = addresses.get(0).getLocality();
+//            String state = addresses.get(0).getAdminArea();
+//            String country = addresses.get(0).getCountryName();
+//            String postalCode = addresses.get(0).getPostalCode();
+//            String knownName = addresses.get(0).getFeatureName();
+
+          return address;
+
+        }catch (Exception ex){
+            return  "";
+        }
     }
 }

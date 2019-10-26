@@ -18,7 +18,7 @@ public class ConnectionController {
     //private static OkHttpClient client = new OkHttpClient();
     public static OkHttpClient client = getUnsafeOkHttpClient();
     public static void signupMechanic(UserData userData, Callback callback) {
-        String  url  = Constants.Base_URL + "signupMechanic";
+        String  url  = Constants.Base_URL + "/signupMechanic";
 
         RequestBody requestBody = new FormBody.Builder()
                 .add("firstname", userData.getFullName())
@@ -37,7 +37,7 @@ public class ConnectionController {
     }
 
     public static void loginMechanic(UserData userData, Callback callback) {
-        String  url  = Constants.Base_URL +"loginMechanic"; // "loginMechanic";
+        String  url  = Constants.Base_URL +"/loginMechanic"; // "loginMechanic";
         RequestBody requestBody = new FormBody.Builder()
                 .add("email", userData.getEmailAddress())
                 .add("password", userData.getPassword())
@@ -59,10 +59,12 @@ public class ConnectionController {
                     new X509TrustManager() {
                         @Override
                         public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+
                         }
 
                         @Override
                         public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+
                         }
 
                         @Override

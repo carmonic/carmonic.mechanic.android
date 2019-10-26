@@ -37,13 +37,16 @@ import com.camsys.carmonic.mechanic.Dasboard.AcceptAndDeclineFragment;
 import com.camsys.carmonic.mechanic.Dasboard.AlertDialogFragment;
 import com.camsys.carmonic.mechanic.Dasboard.CustomerDetailFragment;
 import com.camsys.carmonic.mechanic.Dasboard.OrderDetailFragment;
+import com.camsys.carmonic.mechanic.MainActivity;
 import com.camsys.carmonic.mechanic.Model.UserModel;
 import com.camsys.carmonic.mechanic.Model.Users;
 import com.camsys.carmonic.mechanic.R;
 import com.camsys.carmonic.mechanic.Service.FetchAddressIntentService;
 import com.camsys.carmonic.mechanic.Utilities.Constants;
+import com.camsys.carmonic.mechanic.Utilities.NotificationUtil;
 import com.camsys.carmonic.mechanic.Utilities.SharedData;
 import com.camsys.carmonic.mechanic.Utilities.Util;
+import com.camsys.carmonic.mechanic.onboarding.SignInActivtiy;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -74,6 +77,8 @@ import okhttp3.OkHttpClient;
 
 import java.net.URISyntaxException;
 
+import static com.camsys.carmonic.mechanic.Utilities.Util.GetAddressFromLatLong;
+
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnCameraMoveStartedListener,
@@ -101,8 +106,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     private PolylineOptions currPolylineOptions;
     String regID;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    SharedData sharedData =   null;
-    EditText txtMyLocation =  null;
+    SharedData sharedData = null;
+    EditText txtMyLocation = null;
 
     private AddressResultReceiver mResultReceiver;
     protected String mAddressOutput;
@@ -111,19 +116,17 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     protected String mStateOutput;
 
     LinearLayout mLinearLayout;
-    TextView  txtOrderStatus;
+    TextView txtOrderStatus;
     AppCompatButton btnContact;
     private Socket socket;
-    Gson gson =  null;
-
+    Gson gson = null;
+    String customerJSON =  "";
     String action = "";
     String message = null;
 
 
-
-
-    public void showRequest(final Activity activity, String message,final String customerJSON){
-        final Dialog dialog =new Dialog(activity);
+    public void showRequest(final Activity activity, final String customerJSON) {
+        final Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.fragment_result_dialog);
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
         lp.dimAmount = 0.7f;
@@ -137,18 +140,26 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 //        params.width =  ViewGroup.LayoutParams.WRAP_CONTENT;
 //        layout.setLayoutParams(params);
 
-        TextView txtTopic  = (TextView)dialog.findViewById(R.id.txtTopic);
-        TextView cancelButton  = (TextView)dialog.findViewById(R.id.cancel_button);
+        TextView txtTopic = (TextView) dialog.findViewById(R.id.txtTopic);
+        TextView cancelButton = (TextView) dialog.findViewById(R.id.cancel_button);
 
         txtTopic.setVisibility(View.GONE);
         cancelButton.setVisibility(View.GONE);
 
 
-        TextView txtNotificationText  = (TextView)dialog.findViewById(R.id.txtNotification);
-        TextView txtSeeDetail  = (TextView)dialog.findViewById(R.id.txtSeeDetail);
-        TextView txtDecline  = (TextView)dialog.findViewById(R.id.txtDecline);
+        TextView txtNotificationText = (TextView) dialog.findViewById(R.id.txtNotification);
+        TextView txtSeeDetail = (TextView) dialog.findViewById(R.id.txtSeeDetail);
+        TextView txtDecline = (TextView) dialog.findViewById(R.id.txtDecline);
 
-        txtNotificationText.setText("A customer needs your help 5km away from your location");
+        Users customer = gson.fromJson(customerJSON, Users.class);
+        String customerName = customer.getFirstname();
+        double lat = customer.getLatitude();
+
+        double distance = Util.distance(customer.getLatitude(), customer.getLongitude(), mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+        String msg = String.format("A customer needs your help, %dkm away from your location", Math.round(distance));
+
+        txtNotificationText.setText(msg.replace("xxx", distance + ""));
 
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
@@ -157,21 +168,24 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             public void onClick(View v) {
 
 
-
-                final AcceptAndDeclineFragment myBottomSheet = AcceptAndDeclineFragment.newInstance(customerJSON, new AcceptAndDeclineFragment.MyDialogFragmentListener() {
+                final AcceptAndDeclineFragment myBottomSheet = AcceptAndDeclineFragment.newInstance(customerJSON, mLastLocation.getLatitude(), mLastLocation.getLongitude(), new AcceptAndDeclineFragment.MyDialogFragmentListener() {
                     @Override
                     public void onReturnValue(boolean indicator) {
 
-                        if(indicator) {
+                        if (indicator) {
+
+
+                            //connect to remote to register the status  of request
+
+                            acceptRequestSocketConnection(mLastLocation,customerJSON);
 
 
 
 
-                            ShowingAcceptRequest(getActivity());
+                        } else {
 
-                        }else{
+                            rejectRequestSocketConnection(mLastLocation,customerJSON);
 
-                            showingRejectRequest(getActivity());
                         }
 
                     }
@@ -184,16 +198,19 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         txtDecline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showingRejectRequest(getActivity());
+                showingRejectRequest(getActivity(), customerJSON);
                 dialog.dismiss();
-             }
+            }
         });
         dialog.show();
     }
 
 
-    public void ShowingAcceptRequest(final Activity activity){
-        final Dialog dialog =new Dialog(activity);
+    public void ShowingAcceptRequest(final Activity activity, final String  customerJSON) {
+
+        Users customer = gson.fromJson(customerJSON, Users.class);
+
+        final Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.fragment_result_dialog);
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
         lp.dimAmount = 0.7f;
@@ -204,20 +221,24 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         LinearLayout layout = dialog.findViewById(R.id.root);
         ViewGroup.LayoutParams params = layout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        params.width =  ViewGroup.LayoutParams.WRAP_CONTENT;
+        params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
         layout.setLayoutParams(params);
 
-        TextView txtTopic  = (TextView)dialog.findViewById(R.id.txtTopic);
-        TextView cancelButton  = (TextView)dialog.findViewById(R.id.cancel_button);
-        TextView txtNotificationText  = (TextView)dialog.findViewById(R.id.txtNotification);
-        TextView txtSeeDetail  = (TextView)dialog.findViewById(R.id.txtSeeDetail);
-        TextView txtDecline  = (TextView)dialog.findViewById(R.id.txtDecline);
+        TextView txtTopic = (TextView) dialog.findViewById(R.id.txtTopic);
+        TextView cancelButton = (TextView) dialog.findViewById(R.id.cancel_button);
+        TextView txtNotificationText = (TextView) dialog.findViewById(R.id.txtNotification);
+        TextView txtSeeDetail = (TextView) dialog.findViewById(R.id.txtSeeDetail);
+        TextView txtDecline = (TextView) dialog.findViewById(R.id.txtDecline);
 
         txtTopic.setVisibility(View.VISIBLE);
         cancelButton.setVisibility(View.GONE);
 
         txtTopic.setText("You accepted the request!");
-        txtNotificationText.setText("Fikayo is waiting for you at 789 Oriole Pkway");
+
+
+        String msg = String.format("%s is waiting %s", customer.getFirstname(), Util.GetAddressFromLatLong(getContext(), customer.getLatitude(), customer.getLongitude()));
+
+        txtNotificationText.setText(msg);    //("Fikayo is waiting for you at 789 Oriole Pkway");
         txtNotificationText.setTextColor(getResources().getColor(R.color.dialog_text));
 
         txtDecline.setTextColor(getResources().getColor(R.color.dialog_text));
@@ -229,7 +250,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View v) {
 
-                final CustomerDetailFragment myBottomSheet = CustomerDetailFragment.newInstance("");
+                final CustomerDetailFragment myBottomSheet = CustomerDetailFragment.newInstance(customerJSON);
                 myBottomSheet.show(getActivity().getSupportFragmentManager(), myBottomSheet.getTag());
 
             }
@@ -242,17 +263,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 dialog.dismiss();
 
 
-
             }
         });
         dialog.show();
     }
 
 
-
-
-    public void showingRejectRequest(final Activity activity){
-        final Dialog dialog =new Dialog(activity);
+    public void showingRejectRequest(final Activity activity, String customerJSON) {
+        final Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.fragment_result_dialog);
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
         lp.dimAmount = 0.7f;
@@ -261,16 +279,16 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
-        View view =  (View)dialog.findViewById(R.id.line1);
-        TextView txtTopic  = (TextView)dialog.findViewById(R.id.txtTopic);
-        TextView cancelButton  = (TextView)dialog.findViewById(R.id.cancel_button);
+        View view = (View) dialog.findViewById(R.id.line1);
+        TextView txtTopic = (TextView) dialog.findViewById(R.id.txtTopic);
+        TextView cancelButton = (TextView) dialog.findViewById(R.id.cancel_button);
         LinearLayout container = (LinearLayout) dialog.findViewById(R.id.container);
         txtTopic.setVisibility(View.VISIBLE);
         cancelButton.setVisibility(View.VISIBLE);
         container.setVisibility(View.GONE);
         view.setVisibility(View.GONE);
 
-        TextView txtNotificationText  = (TextView)dialog.findViewById(R.id.txtNotification);
+        TextView txtNotificationText = (TextView) dialog.findViewById(R.id.txtNotification);
 
         txtTopic.setText("You rejected the request!");
         txtNotificationText.setText("The request has been transferred to another mechanic.");
@@ -312,13 +330,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         Bundle args = new Bundle();
         args.putString("action", intent.getAction());
         args.putString("message", intent.getStringExtra("message"));
-        args.putString("customerJSON",intent.getStringExtra("customerJSON"));
+        args.putString("customerJSON", intent.getStringExtra("customerJSON"));
         fragment.setArguments(args);
         return fragment;
     }
 
 
     private Socket mSocket;
+
     {
         try {
             mSocket = IO.socket("http://chat.socket.io");
@@ -332,14 +351,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         View rootView = inflater.inflate(R.layout.fragment_map_view, container, false);
         setHasOptionsMenu(true);
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
-        txtMyLocation = (EditText) rootView.findViewById(R.id.txtMyLocation) ;
-        txtOrderStatus = (TextView)rootView.findViewById(R.id.txtOrderStatus);
+        txtMyLocation = (EditText) rootView.findViewById(R.id.txtMyLocation);
+        txtOrderStatus = (TextView) rootView.findViewById(R.id.txtOrderStatus);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        sharedData =  new SharedData(getActivity());
-        String showPopUp = sharedData.Get(Constants.IS_LOG_IN,null);
-        mLinearLayout = (LinearLayout)rootView.findViewById(R.id.bottomContainer) ;
+        sharedData = new SharedData(getActivity());
+        String showPopUp = sharedData.Get(Constants.IS_LOG_IN, null);
+        mLinearLayout = (LinearLayout) rootView.findViewById(R.id.bottomContainer);
         mLinearLayout.setVisibility(View.GONE);
 
 
@@ -354,7 +373,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             public void onClick(View v) {
 
 
-                final OrderDetailFragment orderDetailFragment = OrderDetailFragment.newInstance("", new OrderDetailFragment.MyDialogFragmentListener() {
+                final OrderDetailFragment orderDetailFragment = OrderDetailFragment.newInstance(customerJSON, new OrderDetailFragment.MyDialogFragmentListener() {
                     @Override
                     public void onReturnValue(boolean indicator) {
 
@@ -370,7 +389,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         return rootView;
     }
 
-    private void checkPlayService(Context context){
+    private void checkPlayService(Context context) {
 
         if (checkPlayServices()) {
             // If this check succeeds, proceed with normal processing.
@@ -414,6 +433,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         //Toast.makeText(getActivity(), regID, Toast.LENGTH_SHORT).show();
 
     }
+
     private void changeCamera(CameraUpdate update, GoogleMap.CancelableCallback callback, LatLng latlng, String Address, int drawable) {
         MarkerOptions markerOptions = new MarkerOptions();
         mGoogleMap.animateCamera(update, callback);
@@ -436,9 +456,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         gson = new Gson();
         if (getArguments() != null && getArguments().getString("action") == Constants.SetAction.MECHANIC_REQUEST) {
             message = getArguments().getString("message");
-            String customerJSON = getArguments().getString("customerJSON");
+            customerJSON  = getArguments().getString("customerJSON");
 
-            showRequest(getActivity(), message,customerJSON);
+            showRequest(getActivity(), customerJSON);
         }
     }
 
@@ -450,13 +470,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     }
 
 
-
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.clear();    //remove all items
         getActivity().getMenuInflater().inflate(R.menu.main, menu);
-        switch1= (Switch)menu.findItem(R.id.myswitch).getActionView().findViewById(R.id.switchAB);
+        switch1 = (Switch) menu.findItem(R.id.myswitch).getActionView().findViewById(R.id.switchAB);
         switch1.setVisibility(View.INVISIBLE);
 
     }
@@ -542,7 +561,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
                 mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-              //  startIntentService(mLastLocation);
+                //  startIntentService(mLastLocation);
 
                 //initCamera(mLastLocation);
             } else {
@@ -566,13 +585,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
             mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-           // startIntentService(mLastLocation);
+            // startIntentService(mLastLocation);
         }
 
         setupSocket();
 
 
-       mGoogleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+        mGoogleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 Log.d("Camera postion change" + "", cameraPosition + "");
@@ -589,10 +608,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 
                     startIntentService(mLocation);
 
-                    try{
+                    try {
                         socketLocationUpdate(mLocation);
-                    }catch (Exception ex){
-                       ex.printStackTrace();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
 
                 } catch (Exception e) {
@@ -631,8 +650,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             if (mLastLocation != null) {
                 // changeMap(mLastLocation);
                 initCamera(mLastLocation);
-                Log.d("TAG", "ON connected");
-                Toast.makeText(getActivity(),"Longitude = " +mLastLocation.getLongitude()+ " Latyitude = " + mLastLocation.getLatitude() + "" ,Toast.LENGTH_LONG).show();
+                //Log.d("TAG", "ON connected");
+                // Toast.makeText(getActivity(),"Longitude = " +mLastLocation.getLongitude()+ " Latyitude = " + mLastLocation.getLatitude() + "" ,Toast.LENGTH_LONG).show();
                 startIntentService(mLastLocation);
                 socketLocationUpdate(mLastLocation);
 
@@ -651,7 +670,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                 LocationServices.FusedLocationApi.requestLocationUpdates(
                         mGoogleApiClient, mLocationRequest, this);
-                Toast.makeText(getActivity(),"Longitude = " +mLastLocation.getLongitude()+ " Latyitude = " + mLastLocation.getLatitude() + "" ,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(),"Longitude = " +mLastLocation.getLongitude()+ " Latyitude = " + mLastLocation.getLatitude() + "" ,Toast.LENGTH_LONG).show();
                 startIntentService(mLastLocation);
                 socketLocationUpdate(mLastLocation);
 
@@ -692,16 +711,16 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
      */
     protected void startIntentService(Location mLocation) {
         // Create an intent for passing to the intent service responsible for fetching the address.
-     try{
+        try {
 
-         Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
-         intent.putExtra(Constants.LocationConstants.RECEIVER, mResultReceiver);
-         intent.putExtra(Constants.LocationConstants.LOCATION_DATA_EXTRA, mLocation);
-         getActivity().startService(intent);
+            Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
+            intent.putExtra(Constants.LocationConstants.RECEIVER, mResultReceiver);
+            intent.putExtra(Constants.LocationConstants.LOCATION_DATA_EXTRA, mLocation);
+            getActivity().startService(intent);
 
-     }catch (Exception  ex ){
-        System.out.println(ex.toString());
-     }
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
 
     }
 
@@ -872,7 +891,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         // mGoogleMap.clear();
         try {
 
-            System.out.println("mCenterLatLong:: " + mCenterLatLong.latitude + "mCenterLatLong:: " + mCenterLatLong.longitude);
+            //System.out.println("mCenterLatLong:: " + mCenterLatLong.latitude + "mCenterLatLong:: " + mCenterLatLong.longitude);
             Location mLocation = new Location("");// Location("");
             mLocation.setLatitude(mCenterLatLong.latitude);
             mLocation.setLongitude(mCenterLatLong.longitude);
@@ -887,7 +906,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
      * displays Place suggestions.
      * Gets the place id of the selected item and issues a request to the Places Geo Data API
      * to retrieve more details about the place.
-     *
      */
 
 
@@ -904,9 +922,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         }
         return true;
     }
-
-
-
 
 
     public static boolean isInteger(String s) {
@@ -934,7 +949,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 //            e.printStackTrace();
 //        }
 //    }
-
     @Override
     public void onReturnValue(boolean indicator) {
 
@@ -971,9 +985,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         try {
 
             Users mechanic = Util.GetUserObjectFromJson(getActivity());
-            mechanic.setLatitude(mLastLocation.getLatitude() + "");
-            mechanic.setLongitude(mLastLocation.getLongitude() + "");
-
+            mechanic.setLatitude(mLastLocation.getLatitude());
+            mechanic.setLongitude(mLastLocation.getLongitude());
 
             OkHttpClient okHttpClient = ConnectionController.client;
             IO.setDefaultOkHttpWebSocketFactory(okHttpClient);
@@ -983,7 +996,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             opts.webSocketFactory = okHttpClient;
             socket = IO.socket(Constants.Base_URL, opts);
             socket.connect();
-            System.out.println("After - Emit" + gson.toJson(mechanic));
+            //System.out.println("After - Emit" + gson.toJson(mechanic));
             socket.emit(Constants.MECHANIC_UPDATE_LOCATION, gson.toJson(mechanic));
 
 
@@ -1014,18 +1027,33 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 public void call(Object... args) {
                     Users mechanic = Util.GetUserObjectFromJson(getActivity());
                     socket.emit("mechanic_register", gson.toJson(mechanic));
+
                 }
 
-            }).on("job_req", new Emitter.Listener() {
+            }).on(Constants.CUSTOMER_REQUEST, new Emitter.Listener() {
 
                 @Override
                 public void call(Object... args) {
                     JSONObject jsonMechanic = (JSONObject) args[0];
                     Users mechanic = gson.fromJson(jsonMechanic.toString(), Users.class);
-                    JSONObject jsonCustomer = (JSONObject) args[1];
+                    final JSONObject jsonCustomer = (JSONObject) args[1];
                     Users customer = gson.fromJson(jsonCustomer.toString(), Users.class);
 
-                    System.out.println("Received job request");
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            showRequest(getActivity(), jsonCustomer.toString());
+                        }
+                    });
+
+                    //System.out.println("Received job request  " + jsonCustomer.toString());
+                    //Toast.makeText(getContext(),"mapview" + jsonCustomer.toString() ,Toast.LENGTH_LONG).show();
+
+                    //   NotificationUtil notificationUtil = new NotificationUtil(getActivity(),jsonCustomer.toString());
+                    //   notificationUtil.showNotificationMessage(" Carmonic","A customer needs your help 5km away from your location","","");
+
 
                     //Notify the mechanic
                 }
@@ -1034,6 +1062,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 
                 @Override
                 public void call(Object... args) {
+
+                    System.out.println("========= 1 ===========");
                 }
 
             });
@@ -1043,6 +1073,66 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    private void acceptRequestSocketConnection(Location mLastLocation,final String customer) {
+        try {
 
+            Users mechanic = Util.GetUserObjectFromJson(getActivity());
+            mechanic.setLatitude(mLastLocation.getLatitude());
+            mechanic.setLongitude(mLastLocation.getLongitude());
+
+            OkHttpClient okHttpClient = ConnectionController.client;
+            IO.setDefaultOkHttpWebSocketFactory(okHttpClient);
+            IO.setDefaultOkHttpCallFactory(okHttpClient);
+            IO.Options opts = new IO.Options();
+            opts.callFactory = okHttpClient;
+            opts.webSocketFactory = okHttpClient;
+            socket = IO.socket(Constants.Base_URL, opts);
+            socket.connect();
+            //System.out.println("After - Emit" + gson.toJson(mechanic));
+            socket.emit(Constants.MECHANIC_ACCEPT_JOB, gson.toJson(mechanic),customer);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    ShowingAcceptRequest(getActivity(), customer);
+                }
+            });
+
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void rejectRequestSocketConnection(Location mLastLocation,final String customer) {
+        try {
+
+            Users mechanic = Util.GetUserObjectFromJson(getActivity());
+            mechanic.setLatitude(mLastLocation.getLatitude());
+            mechanic.setLongitude(mLastLocation.getLongitude());
+
+            OkHttpClient okHttpClient = ConnectionController.client;
+            IO.setDefaultOkHttpWebSocketFactory(okHttpClient);
+            IO.setDefaultOkHttpCallFactory(okHttpClient);
+            IO.Options opts = new IO.Options();
+            opts.callFactory = okHttpClient;
+            opts.webSocketFactory = okHttpClient;
+            socket = IO.socket(Constants.Base_URL, opts);
+            socket.connect();
+            //System.out.println("After - Emit" + gson.toJson(mechanic));
+            socket.emit(Constants.MECHANIC_REJECT_JOB, gson.toJson(mechanic),customer);
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    showingRejectRequest(getActivity(), customer);
+                }
+            });
+
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

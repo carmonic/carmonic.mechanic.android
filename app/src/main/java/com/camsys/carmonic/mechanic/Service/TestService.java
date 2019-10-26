@@ -3,6 +3,7 @@ package com.camsys.carmonic.mechanic.Service;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -76,7 +77,7 @@ public class TestService extends Service  {
     public int onStartCommand(final Intent intent, int flags, int startId) {
         Log.i("TAG", "onStartCommand");
 
-        Toast.makeText(getApplicationContext(),"onStartCommand",Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(),"onStartCommand",Toast.LENGTH_LONG).show();
 
 
 
@@ -84,22 +85,7 @@ public class TestService extends Service  {
         scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
             public void run() {
 
-                Customer customer  =  new  Customer();
-                customer.setFirstname("Ademola");
-                customer.setDestination("Ikorodu Garage");
-                customer.setLastname("Isola");
-                customer.setSource("Ikorodu");
-                customer.setUsername("biola.gold@gmail.com");
-
-               final String  customerJSON  = gson.toJson(customer);
-
-//                NotificationUtil notificationUtil = new NotificationUtil(getApplicationContext(),customerJSON);
-//                notificationUtil.showNotificationMessage(" Carmonic","A customer needs your help 5km away from your location","","");
-
-                System.out.println("About to pick a  request");
-                System.out.println("===================Me and  You============================");
-                try{
-
+                try {
                     OkHttpClient okHttpClient = ConnectionController.client;
                     IO.setDefaultOkHttpWebSocketFactory(okHttpClient);
                     IO.setDefaultOkHttpCallFactory(okHttpClient);
@@ -107,32 +93,53 @@ public class TestService extends Service  {
                     opts.callFactory = okHttpClient;
                     opts.webSocketFactory = okHttpClient;
                     socket = IO.socket(Constants.Base_URL, opts);
-                    socket.on(Constants.CUSTOMER_REQUEST, new Emitter.Listener() {
+                    System.out.println("=========  I am here ===========");
+                    socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+
                         @Override
                         public void call(Object... args) {
 
-                            System.out.println("A customer needs your help 5km away from your location");
-                            System.out.println("======================================================");
-                            System.out.println("====================Inside a request==================================");
-                            System.out.println("======================================================");
-                            System.out.println("======================================================");
-                            System.out.println("A customer needs your help 5km away from your location");
-                            Gson gson  =  new Gson();
-                            JSONObject jsonObject = (JSONObject) args[0];
+                            System.out.println("=========  about to register mechanic ===========");
+                            String jSon = Util.GetUserJson(getApplicationContext());
+                            socket.emit("mechanic_register", jSon);
+                        }
 
-                            Toast.makeText(getApplicationContext(),args[0] + "",Toast.LENGTH_LONG).show();
-//                            NotificationUtil notificationUtil = new NotificationUtil(getApplicationContext(),customerJSON);
-//                            notificationUtil.showNotificationMessage(" Carmonic","A customer needs your help 5km away from your location","","");
+                    }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+                        @Override
+                        public void call(Object... args) {
+
+                            System.out.println("=========  2 ===========");
+                        }
+
+                    });
+
+                    socket.on("job_req", new Emitter.Listener() {
+
+                        @Override
+                        public void call(Object... args) {
+
+                            System.out.println("=========  i am here again ===========");
+                            JSONObject jsonMechanic = (JSONObject) args[0];
+                            Users mechanic = gson.fromJson(jsonMechanic.toString(), Users.class);
+                            JSONObject jsonCustomer = (JSONObject) args[1];
+                            Users customer = gson.fromJson(jsonCustomer.toString(), Users.class);
+
+                            NotificationUtil notificationUtil = new NotificationUtil(getApplicationContext(),jsonCustomer.toString());
+                            notificationUtil.showNotificationMessage("Carmonic 12","A customer needs your help 5km away from your location","","");
 
                         }
-                    });
-                    socket.connect();
-                } catch (URISyntaxException e) {
 
-                    System.out.println("Exception:::::::::");
-                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
+                    });
+
+                    Log.d(Constants.TAG, "onStartCommand. Socket should be up");
+                    socket.connect();
+
+                } catch (URISyntaxException e) {
                     e.printStackTrace();
+                    System.out.println("=========  exception ===========");
                 }
+
             }
         }, 0, 1, TimeUnit.MINUTES);
 
@@ -229,6 +236,12 @@ public class TestService extends Service  {
         super.onDestroy();
         scheduleTaskExecutor.shutdownNow();
     }
+
+
+    private void setupSocket(final Activity context) {
+
+    }
+
 
 
 }

@@ -327,7 +327,7 @@
 
 
         <TextView
-            android:id="@+id/txtDescription"
+            android:id="@+id/txtNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/container"
@@ -360,7 +360,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/txtTime"
+            android:id="@+id/txtExtraNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtText"
