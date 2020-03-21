@@ -1,4 +1,4 @@
-package com.camsys.carmonic.mechanic.Dasboard;
+package com.camsys.carmonic.mechanic.Help;
 
 import android.os.Bundle;
 
@@ -12,12 +12,12 @@ import android.view.View;
 
 import com.camsys.carmonic.mechanic.R;
 
-public class ThankYouActivity extends AppCompatActivity {
+public class HelpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_thank_you);
+        setContentView(R.layout.activity_help);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
