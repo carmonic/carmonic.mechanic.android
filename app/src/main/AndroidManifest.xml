@@ -26,13 +26,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/mainAppTheme">
-        <activity android:name=".History.HistoryDetailActivity"></activity>
+
+        <activity
+            android:name=".Dasboard.GenerateBillFragment"
+            ></activity>
+
+        <activity
+            android:name=".Dasboard.ThankYouActivity"
+            android:label="@string/title_activity_thank_you"
+            android:theme="@style/mainAppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Help.HelpActivity"
+            android:label="@string/title_activity_help" />
+        <activity android:name=".Profile.ProfileActivity" />
+        <activity
+            android:name=".History.HistoryActivity"
+            android:label="@string/title_activity_history" />
+        <activity android:name=".History.HistoryDetailActivity" />
 
         <service
             android:name=".Service.TestService"
             android:enabled="true"
             android:exported="false" />
-
         <service
             android:name=".Service.FetchAddressIntentService"
             android:enabled="true"
@@ -83,7 +98,7 @@
             android:theme="@style/mainAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

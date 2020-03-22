@@ -39,10 +39,6 @@ public class FetchAddressIntentService extends IntentService {
     public FetchAddressIntentService() {
         // Use the TAG to name the worker thread.
         super(TAG);
-        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::");
-        System.out.println(":::::::I:::am:::here:::to:::start:::the:::::SERVICE::::");
-        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::");
-        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::");
     }
 
 

@@ -15,6 +15,7 @@ import android.graphics.LinearGradient;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.*;
 import android.provider.Settings;
 
@@ -38,11 +39,13 @@ import com.camsys.carmonic.mechanic.Dasboard.AlertDialogFragment;
 import com.camsys.carmonic.mechanic.Dasboard.CustomerDetailFragment;
 import com.camsys.carmonic.mechanic.Dasboard.OrderDetailFragment;
 import com.camsys.carmonic.mechanic.MainActivity;
+import com.camsys.carmonic.mechanic.Model.Customer;
 import com.camsys.carmonic.mechanic.Model.UserModel;
 import com.camsys.carmonic.mechanic.Model.Users;
 import com.camsys.carmonic.mechanic.R;
 import com.camsys.carmonic.mechanic.Service.FetchAddressIntentService;
 import com.camsys.carmonic.mechanic.Utilities.Constants;
+import com.camsys.carmonic.mechanic.Utilities.DirectionClassUtil;
 import com.camsys.carmonic.mechanic.Utilities.NotificationUtil;
 import com.camsys.carmonic.mechanic.Utilities.SharedData;
 import com.camsys.carmonic.mechanic.Utilities.Util;
@@ -75,8 +78,18 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import okhttp3.OkHttpClient;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import static com.camsys.carmonic.mechanic.Utilities.Constants.MAP_TYPES;
 import static com.camsys.carmonic.mechanic.Utilities.Util.GetAddressFromLatLong;
 
 
@@ -90,6 +103,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         LocationListener, AcceptAndDeclineFragment.MyDialogFragmentListener {
 
 
+    boolean  showRequest  =  true  ;
     // private AddressResultReceiver mResultReceiver;
     protected LatLng start;
     protected LatLng mCenterLatLong;
@@ -119,14 +133,25 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     TextView txtOrderStatus;
     AppCompatButton btnContact;
     private Socket socket;
+
     Gson gson = null;
-    String customerJSON =  "";
+    String mcustomerString =  "";
     String action = "";
     String message = null;
+    boolean showMarker =  false;
+    ArrayList<LatLng> markerPoints;
+
+    TextView txtOrderCustomerName = null,txtTimeToReach = null;
+
+    AppCompatButton btnCallCustomer = null;
+    String  customerPhoneNumber =  "";
 
 
     public void showRequest(final Activity activity, final String customerJSON) {
         final Dialog dialog = new Dialog(activity);
+
+
+
         dialog.setContentView(R.layout.fragment_result_dialog);
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
         lp.dimAmount = 0.7f;
@@ -140,6 +165,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 //        params.width =  ViewGroup.LayoutParams.WRAP_CONTENT;
 //        layout.setLayoutParams(params);
 
+
+        System.out.println("customerJSON::::  " + customerJSON);
+
         TextView txtTopic = (TextView) dialog.findViewById(R.id.txtTopic);
         TextView cancelButton = (TextView) dialog.findViewById(R.id.cancel_button);
 
@@ -151,7 +179,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         TextView txtSeeDetail = (TextView) dialog.findViewById(R.id.txtSeeDetail);
         TextView txtDecline = (TextView) dialog.findViewById(R.id.txtDecline);
 
-        Users customer = gson.fromJson(customerJSON, Users.class);
+        final Users customer = gson.fromJson(customerJSON, Users.class);
         String customerName = customer.getFirstname();
         double lat = customer.getLatitude();
 
@@ -171,34 +199,40 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 final AcceptAndDeclineFragment myBottomSheet = AcceptAndDeclineFragment.newInstance(customerJSON, mLastLocation.getLatitude(), mLastLocation.getLongitude(), new AcceptAndDeclineFragment.MyDialogFragmentListener() {
                     @Override
                     public void onReturnValue(boolean indicator) {
-
                         if (indicator) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
 
-
-                            //connect to remote to register the status  of request
-
-                            acceptRequestSocketConnection(mLastLocation,customerJSON);
-
-
-
+                                    ShowingAcceptRequest(getActivity(), customerJSON);
+                                }
+                            });
 
                         } else {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
 
-                            rejectRequestSocketConnection(mLastLocation,customerJSON);
-
+                                    showingRejectRequest(getActivity(), customerJSON);
+                                }
+                            });
                         }
 
                     }
                 });
                 myBottomSheet.show(getActivity().getSupportFragmentManager(), myBottomSheet.getTag());
                 dialog.dismiss();
+
+
+
             }
         });
 
         txtDecline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showingRejectRequest(getActivity(), customerJSON);
+               // showingRejectRequest(getActivity(), customerJSON);
+                rejectRequestSocketConnection(mLastLocation,customerJSON);
                 dialog.dismiss();
             }
         });
@@ -208,7 +242,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 
     public void ShowingAcceptRequest(final Activity activity, final String  customerJSON) {
 
-        Users customer = gson.fromJson(customerJSON, Users.class);
+        final Users customer = gson.fromJson(customerJSON, Users.class);
 
         final Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.fragment_result_dialog);
@@ -259,9 +293,19 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         txtDecline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                txtOrderCustomerName.setText(customer.getFirstname());
+                String  timeToReach =  txtTimeToReach.getText().toString().replace("Fikayo",customer.getFirstname());
+               txtTimeToReach.setText(timeToReach);
+                customerPhoneNumber =  customer.getPhoneNumber();
+
                 mLinearLayout.setVisibility(View.VISIBLE);
                 dialog.dismiss();
+                //show the marker on the map;
+                showMarker =  true ;
+                mcustomerString  = customerJSON;
 
+              //  createMarker(customer.getLatitude(), customer.getLongitude(), "user", "user");
 
             }
         });
@@ -336,15 +380,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     }
 
 
-    private Socket mSocket;
 
-    {
-        try {
-            mSocket = IO.socket("http://chat.socket.io");
-        } catch (URISyntaxException e) {
-
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -362,26 +398,55 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         mLinearLayout.setVisibility(View.GONE);
 
 
+
+
+        txtOrderCustomerName = (TextView) rootView.findViewById(R.id.txtOrderCustomerName);
+        txtTimeToReach = (TextView) rootView.findViewById(R.id.txtTimeAway);
+
+        btnCallCustomer = (AppCompatButton) rootView.findViewById(R.id.btnContact);
+
         checkPlayService(getActivity());
-        displayFirebaseRegId();
+
         mMapView.getMapAsync(this);
         mResultReceiver = new AddressResultReceiver(new Handler());
 
+        btnCallCustomer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(customerPhoneNumber != ""  && customerPhoneNumber.length() > 10){
 
+                    String phoneNumber  = String.format("tel:%s",customerPhoneNumber);
+
+                    Intent intent =new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse(phoneNumber));
+                    startActivity(intent);
+
+                }
+            }
+        });
         txtOrderStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+               // Toast.makeText(getActivity(),mcustomerString,Toast.LENGTH_LONG).show();
 
-                final OrderDetailFragment orderDetailFragment = OrderDetailFragment.newInstance(customerJSON, new OrderDetailFragment.MyDialogFragmentListener() {
+                 try{
+
+                     final OrderDetailFragment orderDetailFragment = OrderDetailFragment.newInstance(mcustomerString, new OrderDetailFragment.MyDialogFragmentListener() {
                     @Override
                     public void onReturnValue(boolean indicator) {
 
-                        Toast.makeText(getActivity(), "Hi text", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getActivity(), "Hi text", Toast.LENGTH_LONG).show();
                     }
-                });
-                orderDetailFragment.show(getActivity().getSupportFragmentManager(), orderDetailFragment.getTag());
+                   });
+                     orderDetailFragment.show(getActivity().getSupportFragmentManager(), orderDetailFragment.getTag());
 
+
+                 }catch (Exception ex){
+
+                     System.out.println(ex.toString());
+
+                 }
             }
         });
 
@@ -422,17 +487,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-    private void displayFirebaseRegId() {
-        SharedPreferences pref = getActivity().getSharedPreferences("SHARED_PREF", 0);
-        String regId = pref.getString("regId", null);
 
-        Log.e("Firebase", "Firebase reg id: " + regId);
-
-        if (!TextUtils.isEmpty(regId))
-            regID = regId;
-        //Toast.makeText(getActivity(), regID, Toast.LENGTH_SHORT).show();
-
-    }
 
     private void changeCamera(CameraUpdate update, GoogleMap.CancelableCallback callback, LatLng latlng, String Address, int drawable) {
         MarkerOptions markerOptions = new MarkerOptions();
@@ -454,12 +509,17 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         setHasOptionsMenu(true);
         buildGoogleApiClient();
         gson = new Gson();
-        if (getArguments() != null && getArguments().getString("action") == Constants.SetAction.MECHANIC_REQUEST) {
-            message = getArguments().getString("message");
-            customerJSON  = getArguments().getString("customerJSON");
-
-            showRequest(getActivity(), customerJSON);
-        }
+//        if (getArguments() != null && getArguments().getString("action") == Constants.SetAction.MECHANIC_REQUEST) {
+//            message = getArguments().getString("message");
+//            customerJSON  = getArguments().getString("customerJSON");
+//
+//            showRequest(getActivity(), customerJSON);
+//        }else if(showMarker){
+//
+//
+//            initCamera(mLastLocation);
+//
+//        }
     }
 
 
@@ -548,7 +608,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 //Location Permission already granted
                 buildGoogleApiClient();
                 mGoogleMap.setMyLocationEnabled(true);
-                mGoogleMap.setMapType(Constants.MAP_TYPES[1]);
+                mGoogleMap.setMapType(MAP_TYPES[1]);
                 // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(startDirection));
                 mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(14));
                 mGoogleMap.setBuildingsEnabled(true);
@@ -571,7 +631,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         } else {
             buildGoogleApiClient();
             mGoogleMap.setMyLocationEnabled(true);
-            mGoogleMap.setMapType(Constants.MAP_TYPES[1]);
+            mGoogleMap.setMapType(MAP_TYPES[1]);
             mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(14));
             //mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
             //initCamera(mLastLocation);
@@ -608,8 +668,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 
                     startIntentService(mLocation);
 
+//                    if(showRequest) {
+//                        showRequest(getActivity(), gson.toJson(setCustomer()));
+//                    }
+
+                    showRequest =  false;
                     try {
-                        socketLocationUpdate(mLocation);
+                        //socketLocationUpdate(mLocation);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -653,7 +718,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 //Log.d("TAG", "ON connected");
                 // Toast.makeText(getActivity(),"Longitude = " +mLastLocation.getLongitude()+ " Latyitude = " + mLastLocation.getLatitude() + "" ,Toast.LENGTH_LONG).show();
                 startIntentService(mLastLocation);
-                socketLocationUpdate(mLastLocation);
+              //  socketLocationUpdate(mLastLocation);
 
             } else
                 try {
@@ -672,7 +737,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                         mGoogleApiClient, mLocationRequest, this);
                 //Toast.makeText(getActivity(),"Longitude = " +mLastLocation.getLongitude()+ " Latyitude = " + mLastLocation.getLatitude() + "" ,Toast.LENGTH_LONG).show();
                 startIntentService(mLastLocation);
-                socketLocationUpdate(mLastLocation);
+            //    socketLocationUpdate(mLastLocation);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -696,12 +761,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     public void onLocationChanged(Location location) {
         mLastLocation = location;
         initCamera(mLastLocation);
-//        if(mLastLocation != null){
-//            socketLocationUpdate(mLastLocation);
-//            Toast.makeText(getActivity(),"Longitude = " +mLastLocation.getLongitude()+ " Latyitude = " + mLastLocation.getLatitude() + "" ,Toast.LENGTH_LONG).show();
-//
-//        }
-
     }
 
 
@@ -811,20 +870,15 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         // mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        mGoogleMap.setMapType(Constants.MAP_TYPES[1]);
+        mGoogleMap.setMapType(MAP_TYPES[1]);
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
         //startIntentService(location);
+        if(showMarker){
+           // createMarker(location.getLatitude(),location.getLongitude(),"mechanic","mechanic");
+        }
     }
 
-    protected Marker createMarker(double latitude, double longitude, String title, String snippet) {
 
-        return mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude, longitude))
-                .anchor(0.5f, 0.5f)
-                .title(title)
-                .snippet(snippet)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_burst_mode)));
-    }
 
 
     @Override
@@ -997,7 +1051,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             socket = IO.socket(Constants.Base_URL, opts);
             socket.connect();
             //System.out.println("After - Emit" + gson.toJson(mechanic));
-            socket.emit(Constants.MECHANIC_UPDATE_LOCATION, gson.toJson(mechanic));
+           socket.emit(Constants.MECHANIC_UPDATE_LOCATION, gson.toJson(mechanic));
 
 
         } catch (URISyntaxException e) {
@@ -1015,12 +1069,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             IO.Options opts = new IO.Options();
             opts.callFactory = okHttpClient;
             opts.webSocketFactory = okHttpClient;
-
             socket = IO.socket(Constants.Base_URL, opts);
-            /*
-             * EVENT_CONNECT is emitted by the back end as soon as you connect to the socket. On the back end we use "mechanic_register" to register the mechanic as online so emit it here.
-             * EVENT_DISCONNECT emitted by the back end when you disconnect from the socket. This can happen if the app is closed (ie not running in the background) or killed. No need to emit anything in this case
-             */
+
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 
                 @Override
@@ -1038,8 +1088,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                     Users mechanic = gson.fromJson(jsonMechanic.toString(), Users.class);
                     final JSONObject jsonCustomer = (JSONObject) args[1];
                     Users customer = gson.fromJson(jsonCustomer.toString(), Users.class);
-
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -1051,8 +1099,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                     //System.out.println("Received job request  " + jsonCustomer.toString());
                     //Toast.makeText(getContext(),"mapview" + jsonCustomer.toString() ,Toast.LENGTH_LONG).show();
 
-                    //   NotificationUtil notificationUtil = new NotificationUtil(getActivity(),jsonCustomer.toString());
-                    //   notificationUtil.showNotificationMessage(" Carmonic","A customer needs your help 5km away from your location","","");
+                    // NotificationUtil notificationUtil = new NotificationUtil(getActivity(),jsonCustomer.toString());
+                    // notificationUtil.showNotificationMessage(" Carmonic","A customer needs your help 5km away from your location","","");
 
 
                     //Notify the mechanic
@@ -1073,10 +1121,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    private void acceptRequestSocketConnection(Location mLastLocation,final String customer) {
+    private void acceptRequestSocketConnection(final Location mLastLocation,final String customer) {
         try {
 
-            Users mechanic = Util.GetUserObjectFromJson(getActivity());
+
+
+           final Users mechanic = Util.GetUserObjectFromJson(getActivity());
             mechanic.setLatitude(mLastLocation.getLatitude());
             mechanic.setLongitude(mLastLocation.getLongitude());
 
@@ -1086,20 +1136,49 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             IO.Options opts = new IO.Options();
             opts.callFactory = okHttpClient;
             opts.webSocketFactory = okHttpClient;
-            socket = IO.socket(Constants.Base_URL, opts);
+            System.out.println("Before - Accepting");
+
+            socket.emit(Constants.MECHANIC_ACCEPT_JOB);//, gson.toJson(mechanic),customer);
+            System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            System.out.println("after - Accepting");
+
+            if(socket.connected()){
+
+                System.out.println("0000000000000000000000");
+            }else{
+
+                System.out.println("NOOOOOOOONOOOOOON");
+            }
             socket.connect();
-            //System.out.println("After - Emit" + gson.toJson(mechanic));
-            socket.emit(Constants.MECHANIC_ACCEPT_JOB, gson.toJson(mechanic),customer);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
 
-                    ShowingAcceptRequest(getActivity(), customer);
-                }
-            });
+//            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+//
+//                @Override
+//                public void call(Object... args) {
+//                    System.out.println("about to - Accepting");
+//
+//                    //socketLocationUpdate(mLastLocation);
+//                    System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+//                    System.out.println("after - Accepting");
+//
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            ShowingAcceptRequest(getActivity(), customer);
+//                        }
+//                    });
+//                }
+//
+//            });
 
-        } catch (URISyntaxException e) {
+
+
+            System.out.println("after - Accepting");
+
+        } catch (Exception e) {
             e.printStackTrace();
+            System.out.println(e.toString());
         }
     }
 
@@ -1119,9 +1198,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
             opts.webSocketFactory = okHttpClient;
             socket = IO.socket(Constants.Base_URL, opts);
             socket.connect();
-            //System.out.println("After - Emit" + gson.toJson(mechanic));
+            System.out.println("before - Rejecting");
             socket.emit(Constants.MECHANIC_REJECT_JOB, gson.toJson(mechanic),customer);
-
+            System.out.println("after - Rejecting");
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -1133,6 +1212,241 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private Users  setCustomer(){
+     Users user  =  new Users();
+        user.setFirstname("Abiola");
+        user.setLastname("Isola");
+        user.setPassword("");
+        user.setEmail("biola.gold@gmail.com");
+        user.setId(1234);
+        user.setPhoneNumber("08070987420");
+        user.setLatitude(6.63241637947631);
+        user.setLongitude(3.51389698684216);
+       return  user ;
+    }
+
+
+
+
+    private String getDirectionsUrl(LatLng origin, LatLng dest) {
+
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+        String mode = "&mode=DRIVING";
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + sensor +"&key=" + Constants.API_KEYS;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+        System.out.println("Direction url :::: " + url);
+
+        return url;
+    }
+
+    /**
+     * A method to download json data from url
+     */
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+
+            br.close();
+
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+
+    // Fetches data from url passed
+    private class DownloadTask extends AsyncTask<String, Void, String> {
+
+        // Downloading data in non-ui thread
+        @Override
+        protected String doInBackground(String... url) {
+
+            // For storing data from web service
+            String data = "";
+
+            try {
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        // Executes in UI thread, after the execution of
+        // doInBackground()
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            System.out.println("Result :::: " + result);
+
+            ParserTask parserTask = new ParserTask();
+
+            // Invokes the thread for parsing the JSON data
+            parserTask.execute(result);
+        }
+    }
+
+    /**
+     * A class to parse the Google Places in JSON format
+     */
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+        // Parsing the data in non-ui thread
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                DirectionClassUtil parser = new DirectionClassUtil();
+
+                // Starts parsing data
+                routes = parser.parse(jObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        // Executes in UI thread, after the parsing process
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            ArrayList<LatLng> points = null;
+            PolylineOptions lineOptions = null;
+            MarkerOptions markerOptions = new MarkerOptions();
+            String distance = "";
+            String duration = "";
+
+            if (result.size() < 1) {
+                Toast.makeText(getActivity(), "No Points", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Traversing through all the routes
+            for (int i = 0; i < result.size(); i++) {
+                points = new ArrayList<LatLng>();
+                lineOptions = new PolylineOptions();
+
+                // Fetching i-th route
+                List<HashMap<String, String>> path = result.get(i);
+
+                // Fetching all the points in i-th route
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
+
+                    if (j == 0) {    // Get distance from the list
+                        distance = (String) point.get("distance");
+                        continue;
+                    } else if (j == 1) { // Get duration from the list
+                        duration = (String) point.get("duration");
+                        continue;
+                    }
+
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
+                    LatLng position = new LatLng(lat, lng);
+
+                    points.add(position);
+                }
+
+                // Adding all the points in the route to LineOptions
+                lineOptions.addAll(points);
+                lineOptions.width(2);
+                lineOptions.color(Color.RED);
+            }
+
+           // tvDistanceDuration.setText("Distance:" + distance + ", Duration:" + duration);
+
+            // Drawing polyline in the Google Map for the i-th route
+            mGoogleMap.addPolyline(lineOptions);
+        }
+    }
+
+
+    public  void  createMarker(LatLng source,LatLng destination){
+
+
+
+        mGoogleMap.addMarker(new MarkerOptions().position(source).title("Mechanic").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        mGoogleMap.addMarker(new MarkerOptions().position(destination).title("User").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        mGoogleMap.setMapType(MAP_TYPES[1]);
+        mGoogleMap.setTrafficEnabled(false);
+
+
+
+        /**
+         * For the start location, the color of marker is GREEN and
+         * for the end location, the color of marker is RED.
+         */
+//        if (markerPoints.size() == 1) {
+//            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+//        } else if (markerPoints.size() == 2) {
+//            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+//        }
+
+
+
+        // Checks, whether start and end locations are captured
+        //if (markerPoints.size() >= 2) {
+            LatLng origin = source ; //markerPoints.get(0);
+            LatLng dest =  destination ;//markerPoints.get(1);
+
+            // Getting URL to the Google Directions API
+            String url = getDirectionsUrl(origin, dest);
+
+            DownloadTask downloadTask = new DownloadTask();
+
+            // Start downloading json data from Google Directions API
+            downloadTask.execute(url);
+       // }
     }
 
 }

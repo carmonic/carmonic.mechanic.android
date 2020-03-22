@@ -159,7 +159,7 @@
 
 
                 <TextView
-                    android:id="@+id/txtText"
+                    android:id="@+id/txtNoteText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtDescription"
@@ -175,10 +175,10 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/txtNote"
+                    android:id="@+id/txtMoreNote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtText"
+                    android:layout_below="@+id/txtNoteText"
                     android:layout_centerInParent="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="40dp"
@@ -196,7 +196,7 @@
                     android:id="@+id/txtOrderTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txtNote"
+                    android:layout_below="@+id/txtMoreNote"
                     android:layout_centerInParent="true"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"

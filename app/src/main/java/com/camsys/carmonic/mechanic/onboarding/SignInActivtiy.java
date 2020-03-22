@@ -77,98 +77,99 @@ public class SignInActivtiy  extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         ImageButton imgButton = (ImageButton) findViewById(R.id.appBackButton);
-        final Button btnSubmit = (Button) findViewById(R.id.btnSubmit) ;
+    final Button btnSubmit = (Button) findViewById(R.id.btnSubmit) ;
 
 
 
-        txtEmailAddress = (EditText) findViewById(R.id.txtEmailAddress);
-        txtPassowrd = (EditText) findViewById(R.id.txtPassword);
-        inputLayoutEmailAddress = (TextInputLayout) findViewById(R.id.input_layout_email_address);
-        inputLayoutPassword = (TextInputLayout) findViewById(R.id.input_layout_password);
+    txtEmailAddress = (EditText) findViewById(R.id.txtEmailAddress);
+    txtPassowrd = (EditText) findViewById(R.id.txtPassword);
+    inputLayoutEmailAddress = (TextInputLayout) findViewById(R.id.input_layout_email_address);
+    inputLayoutPassword = (TextInputLayout) findViewById(R.id.input_layout_password);
 
         txtEmailAddress.addTextChangedListener(new MyTextWatcher(txtEmailAddress));
         txtPassowrd.addTextChangedListener(new MyTextWatcher(txtPassowrd));
 
-        wait_icon = (LinearLayout) findViewById(R.id.wait_icon);
-        signlayout = (LinearLayout) findViewById(R.id.signlayout);
+    wait_icon = (LinearLayout) findViewById(R.id.wait_icon);
+    signlayout = (LinearLayout) findViewById(R.id.signlayout);
 
         imgButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 finish();
-            }
-        });
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
+    });
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!submitForm()) {
+        @Override
+        public void onClick(View v) {
+            if(!submitForm()) {
 
-                    Util.hideSoftKeyboard(SignInActivtiy.this,btnSubmit);
-                    final UserData user  =  new UserData();
-                    user.setEmailAddress(txtEmailAddress.getText().toString());
-                    user.setPassword(txtPassowrd.getText().toString());
+                Util.hideSoftKeyboard(SignInActivtiy.this,btnSubmit);
+                final UserData user  =  new UserData();
+                user.setEmailAddress(txtEmailAddress.getText().toString());
+                user.setPassword(txtPassowrd.getText().toString());
 
-                    if(Util.checkConnectivity(getApplicationContext())){
-                        signlayout.setVisibility(View.INVISIBLE);
-                        wait_icon.setVisibility(View.VISIBLE);
+                if(Util.checkConnectivity(getApplicationContext())){
+                    signlayout.setVisibility(View.INVISIBLE);
+                    wait_icon.setVisibility(View.VISIBLE);
 
-                        ConnectionController.loginMechanic(user, new okhttp3.Callback() {
-                            @Override
-                            public void onFailure(okhttp3.Call call, final IOException e) {
-                                mActivity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
+                    ConnectionController.loginMechanic(user, new okhttp3.Callback() {
+                        @Override
+                        public void onFailure(okhttp3.Call call, final IOException e) {
+                            mActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
 
-                                        System.out.println("Exception :::: "  +  e.toString());
-                                        Toast.makeText(mActivity,e.toString(),Toast.LENGTH_LONG).show();
+                                    System.out.println("Exception :::: "  +  e.toString());
+                                    Toast.makeText(mActivity,e.toString(),Toast.LENGTH_LONG).show();
+                                    wait_icon.setVisibility(View.INVISIBLE);
+                                    signlayout.setVisibility(View.VISIBLE);
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
+                            //wait_icon.setVisibility(View.INVISIBLE);
+
+                            final UserModel model = gson.fromJson(response.body().string(),UserModel.class);      //GetJSonObject(response.body().string());
+                            mActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    if(model.getAuthInfo().getMessage().contains("Successfully")){
+                                        Users user =  model.getUser();
+                                        String json = gson.toJson(user);
+                                        sharedData.Set(Constants.USER_KEY,json);
+
+                                        Intent intent =  new Intent(SignInActivtiy.this,MainActivity.class);
+                                        intent.setAction(Constants.SetAction.LOGIN);
+                                        intent.putExtra("message","isLogin");
+                                        startActivity(intent);
+                                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                                        finish();
+
+                                    }else {
+
+                                        Toast.makeText(mActivity,model.getAuthInfo().getMessage(),Toast.LENGTH_LONG).show();
                                         wait_icon.setVisibility(View.INVISIBLE);
                                         signlayout.setVisibility(View.VISIBLE);
-
                                     }
-                                });
-                            }
+                                }
+                            });
+                        }
+                    });
+                }else {
 
-                            @Override
-                            public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
-                                //wait_icon.setVisibility(View.INVISIBLE);
-
-                                final UserModel model = gson.fromJson(response.body().string(),UserModel.class);      //GetJSonObject(response.body().string());
-                                mActivity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        if(model.getAuthInfo().getMessage().contains("Successfully")){
-                                            Users user =  model.getUser();
-                                            String json = gson.toJson(user);
-                                            sharedData.Set(Constants.USER_KEY,json);
-
-                                            Intent intent =  new Intent(SignInActivtiy.this,MainActivity.class);
-                                            intent.setAction(Constants.SetAction.LOGIN);
-                                            intent.putExtra("message","isLogin");
-                                            startActivity(intent);
-                                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                                            finish();
-
-                                        }else {
-
-                                            Toast.makeText(mActivity,model.getAuthInfo().getMessage(),Toast.LENGTH_LONG).show();
-                                            wait_icon.setVisibility(View.INVISIBLE);
-                                            signlayout.setVisibility(View.VISIBLE);
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                    }else {
-
-                        Toast.makeText(SignInActivtiy.this, "Internet connection is not available,kindly try again later.", Toast.LENGTH_LONG).show();
-                    }
-
+                    Toast.makeText(SignInActivtiy.this, "Internet connection is not available,kindly try again later.", Toast.LENGTH_LONG).show();
                 }
 
             }
-        });
-    }
+
+        }
+    });
+}
 
 
     private class MyTextWatcher implements TextWatcher {
@@ -194,9 +195,9 @@ public class SignInActivtiy  extends AppCompatActivity {
                 case R.id.input_layout_password:
                     validatePassword();
                     break;
-                case R.id.input_layout_confirm_password:
-                    validatePassword();
-                    break;
+//                case R.id.input_layout_confirm_password:
+//                    validatePassword();
+//                    break;
 
             }
         }
@@ -204,6 +205,9 @@ public class SignInActivtiy  extends AppCompatActivity {
 
 
     }
+
+
+
     private boolean submitForm() {
         boolean cancel =  false ;
 
