@@ -7,6 +7,8 @@
     <color name="colorYellow">#EDD170</color>
     <color name="colorPrimaryTextColor">#edd170</color>
 
+    <color name="color_nav_header">#162475</color>
+
 
     <color name="colorWhite">#ffffff</color>
     <color name="nav_dark">#212121</color>

@@ -10,12 +10,15 @@ public class Constants {
     public static final String USER_KEY = "userKey";
     public static  String TAG = "CarmonicLog";
 
-    public static String API_KEYS = "AIzaSyCrNr-TwLxRsDV2obUiVRvrpYecomSfDcc";
+    public static String API_KEYS ="AIzaSyCvNTJmbEndaYQauzXi4Q39hL_dYZHbRC8";// "AIzaSyCrNr-TwLxRsDV2obUiVRvrpYecomSfDcc";
     public static String SERVICE_KEYS = "256c33bcc75b45bb95041b51bdd6fedf";
 //192.168.43.237
 
-    public  static  String URL = "https://192.168.43.237:8443/";// "https://ec2-35-177-219-101.eu-west-2.compute.amazonaws.com:8443/";
-    public  static  String  Base_URL =  "https://192.168.43.237:8443";// "https://ec2-35-177-219-101.eu-west-2.compute.amazonaws.com:8443/";
+     //local
+  //  public  static  String  Base_URL = "https://192.168.43.237:8443";//192.168.43.237
+
+    //remote
+    public  static  String  Base_URL =   "https://ec2-35-177-219-101.eu-west-2.compute.amazonaws.com:8443";
 
 //"https://192.168.43.237:8443/";//
 
@@ -45,7 +48,10 @@ public class Constants {
     public  static final String CUSTOMER_REQUEST = "job_req";
     public  static  final String MECHANIC_ACCEPT_JOB = "mechanic_accept_job";
     public  static  final String  MECHANIC_REJECT_JOB = "mechanic_reject_job";
-
+    public  static  final String  MECHANIC_START_JOB = "mechanic_start_job";
+    public  static  final String  MECHANIC_REGISTER = "mechanic_register";
+    public  static  final String  MECHANIC_IN_PROGRESS_JOB = "mechanic_in_progress";
+    public  static  final String  MECHANIC_COMPLETE_JOB = "mechanic_complete";
 
     public class LocationConstants {
 
@@ -58,6 +64,7 @@ public class Constants {
         public static final String LOCATION_DATA_AREA = PACKAGE_NAME + ".LOCATION_DATA_AREA";
         public static final String LOCATION_DATA_CITY = PACKAGE_NAME + ".LOCATION_DATA_CITY";
         public static final String LOCATION_DATA_STREET = PACKAGE_NAME + ".LOCATION_DATA_STREET";
+
 
     }
 

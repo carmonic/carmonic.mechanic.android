@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@android:color/transparent"
+    android:theme="@style/ToolbarTheme"
+    app:titleTextAppearance="@style/Toolbar.TitleText"
     app:popupTheme="@style/AppTheme.PopupOverlay">
 
     <androidx.appcompat.widget.AppCompatImageButton
@@ -16,6 +18,18 @@
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Title"
+        android:id="@+id/txtTitle"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryTextColor"
+        />
 
 
 

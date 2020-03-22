@@ -8,12 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.camsys.carmonic.mechanic.History.HistoryActivity;
 import com.camsys.carmonic.mechanic.History.HistoryDetailActivity;
-import com.camsys.carmonic.mechanic.History.HistoryFragment;
 import com.camsys.carmonic.mechanic.Model.HistoryItem;
 import com.camsys.carmonic.mechanic.R;
 
@@ -27,10 +27,10 @@ import java.util.ArrayList;
 public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragmentAdapter.ViewHolder> {
 
     private final ArrayList<HistoryItem> accList;
-    private final HistoryFragment.OnListFragmentInteractionListener mListener;
+    private final HistoryActivity.OnListFragmentInteractionListener mListener;
     Context context;
 
-    public HistoryFragmentAdapter(ArrayList<HistoryItem> accList, HistoryFragment.OnListFragmentInteractionListener listener, Context context) {
+    public HistoryFragmentAdapter(ArrayList<HistoryItem> accList, HistoryActivity.OnListFragmentInteractionListener listener, Context context) {
         this.accList = accList;
         mListener = listener;
         this.context = context;

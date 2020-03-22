@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import com.camsys.carmonic.mechanic.Model.Users;
 import com.camsys.carmonic.mechanic.R;
+import com.camsys.carmonic.mechanic.Utilities.Util;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -35,6 +36,7 @@ public class CustomerDetailFragment extends BottomSheetDialogFragment {
     TextView txtCustomerName;
     TextView  txtExtraNote;
     TextView txtNote;
+    TextView  txtTextHeader ;
 
 
     public static CustomerDetailFragment newInstance(String string) {
@@ -81,8 +83,17 @@ public class CustomerDetailFragment extends BottomSheetDialogFragment {
        txtSourceLocation = (TextView)dialog.findViewById(R.id.txtSourceLocation);
        txtExtraNote = (TextView)dialog.findViewById(R.id.txtExtraNote);
        txtNote = (TextView)dialog.findViewById(R.id.txtNote);
-
+       txtTextHeader =  (TextView)dialog.findViewById(R.id.txtTextHeader);
        txtCustomerName.setText(user.getFirstname());
+
+        String  customerLocation  =  Util.GetAddressFromLatLong(getContext(), user.getLatitude(), user.getLongitude());
+        txtDestinationLocation.setText(customerLocation);
+
+        String  descNote  =  getResources().getString(R.string.location_descr).replace("XXX",user.getFirstname()).replace("YYY",Util.GetAddressFromLatLong(getContext(), user.getLatitude(), user.getLongitude()));
+
+        txtNote.setText(descNote);
+        String textHeader = txtTextHeader.getText().toString().replace("FIKAYO",user.getFirstname());
+
 
 
         cancel_action = (ImageView) dialog.findViewById(R.id.close);

@@ -10,48 +10,54 @@
     android:background="@drawable/grad_hom"
     tools:ignore="UnusedAttribute">
 
-    <LinearLayout
-        android:id="@+id/root"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/tool_bar"
+        />
 
 
-        <RelativeLayout
-            android:id="@+id/infoPanel"
-            android:layout_below="@+id/cancel_action"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="60dp"
-            android:orientation="vertical"
-            android:visibility="visible"
-            >
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="My Profile"
-                android:layout_marginBottom="10dp"
-                android:textColor="@color/colorYellow"
-                android:textSize="24dp"
-                android:textStyle="bold" />
+<!--    <LinearLayout-->
+<!--        android:id="@+id/root"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
 
 
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/infoPanel"-->
+<!--            android:layout_below="@+id/cancel_action"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginTop="60dp"-->
+<!--            android:orientation="vertical"-->
+<!--            android:visibility="visible"-->
+<!--            >-->
 
-
-
-
-
-
-
-
-
-
-        </RelativeLayout>
+<!--            <TextView-->
+<!--                android:id="@+id/title"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:text="My Profile"-->
+<!--                android:layout_marginBottom="10dp"-->
+<!--                android:textColor="@color/colorYellow"-->
+<!--                android:textSize="24dp"-->
+<!--                android:textStyle="bold" />-->
 
 
 
 
-    </LinearLayout>
+
+
+
+
+
+
+
+
+<!--        </RelativeLayout>-->
+
+
+
+
+<!--    </LinearLayout>-->
 </LinearLayout>

@@ -16,17 +16,17 @@
 
 
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:itemIconTint="@color/colorYellow"
-        android:background="@color/colorPrimaryDark"
-        app:theme="@style/drawer_theme"
-        app:menu="@menu/activity_dashboard_drawer"
-        >
+<!--    <com.google.android.material.navigation.NavigationView-->
+<!--        android:id="@+id/nav_view"-->
+<!--        android:layout_width="250dp"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_gravity="start"-->
+<!--        android:fitsSystemWindows="true"-->
+<!--        android:background="@color/colorPrimaryDark"-->
+<!--        app:theme="@style/drawer_theme"-->
+<!--        app:menu="@menu/activity_dashboard_drawer"-->
+
+<!--        >-->
 
         <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->
@@ -35,7 +35,20 @@
         <!--</LinearLayout>-->
 
 
-    </com.google.android.material.navigation.NavigationView>
+<!--    </com.google.android.material.navigation.NavigationView>-->
+
+
+    <com.rom4ek.arcnavigationview.ArcNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/colorPrimaryDark"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/activity_dashboard_drawer"
+        app:arc_cropDirection="cropInside"
+        app:theme="@style/drawer_theme"
+        app:arc_width="96dp"/>
 
 
 

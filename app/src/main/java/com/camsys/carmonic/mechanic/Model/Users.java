@@ -54,6 +54,10 @@ public   class Users {
     @Expose
     private double latitude;
 
+    @Ignore
+    @SerializedName("phone")
+    @Expose
+    private String  phone;
 
 //        private double starRating;
 //
@@ -131,9 +135,13 @@ public   class Users {
     }
 
 
+    public void setPhoneNumber(String phone) {
+        this.phone =  phone ;
+    }
 
-
-
+    public String getPhoneNumber() {
+        return phone;
+    }
 
 }
 

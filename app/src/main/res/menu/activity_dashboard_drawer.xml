@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+        <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_profle"
+                    android:icon="@mipmap/ic_account_menu"
+                    android:title="My Profile" />
 
-        <item
-            android:id="@+id/nav_profle"
-            android:icon="@null"
-            android:title="My Profile" />
+                <item
+                    android:id="@+id/nav_account"
+                    android:icon="@mipmap/ic_account_menu"
+                    android:title="Account" />
 
-        <item
-            android:id="@+id/nav_account"
-            android:icon="@null"
-            android:title="Account" />
+                <item
+                    android:id="@+id/nav_history"
+                    android:icon="@mipmap/ic_account_menu"
+                    android:title="History" />
 
-        <item
-            android:id="@+id/nav_history"
-            android:icon="@null"
-            android:title="History" />
+                <item
+                    android:id="@+id/nav_help"
+                    android:icon="@mipmap/ic_account_menu"
+                    android:title="Help" />
 
-        <item
-            android:id="@+id/nav_help"
-            android:icon="@null"
-            android:title="Help" />
-
+        </group>
 
 </menu>

@@ -41,17 +41,14 @@ public class LandingPage extends AppCompatActivity {
         Button  btnSignUp  = (Button) findViewById(R.id.btn_register);
 
         String storedData =  sharedData.Get(Constants.USER_KEY,"");
-//        if(storedData == ""){
+
+//        if(storedData != ""){
 //            Intent intent  =  new Intent(getApplicationContext(), MainActivity.class);
 //            startActivity(intent);
 //            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 //            finish();
 //        }
-        Users users  =  gson.fromJson(storedData,Users.class);
-
-
-
-
+       //Users users  =  gson.fromJson(storedData,Users.class);
 
        btnSignIn.setOnClickListener(new View.OnClickListener() {
            @Override

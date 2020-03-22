@@ -15,15 +15,26 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.camsys.carmonic.mechanic.API.ConnectionController;
 import com.camsys.carmonic.mechanic.MainActivity;
 import com.camsys.carmonic.mechanic.Model.Customer;
 import com.camsys.carmonic.mechanic.Model.Users;
 import com.camsys.carmonic.mechanic.R;
+import com.camsys.carmonic.mechanic.Utilities.Constants;
 import com.camsys.carmonic.mechanic.Utilities.Util;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+import okhttp3.OkHttpClient;
 
 public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
 
@@ -38,6 +49,7 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
     TextView txtCustomerName;
     TextView txtRating;
     TextView txtDescription;
+    TextView txtText ;
 
 
     MyDialogFragmentListener listener =  null;
@@ -46,6 +58,7 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
     Gson gson  =  null;
     Location mLastLocation =  null;
     double userLat,userLong;
+    private Socket socket;
 
 
 
@@ -108,7 +121,7 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
         btnAccept = (Button) dialog.findViewById(R.id.btnAccept);
         btnDecline = (Button) dialog.findViewById(R.id.btnDecline);
         cancel_action = (TextView) dialog.findViewById(R.id.cancel_action);
-
+        txtText  = (TextView) dialog.findViewById(R.id.txtText);
 
         txtCustomerName =  (TextView) dialog.findViewById(R.id.txtCustomerName);
         txtDescription = (TextView)dialog.findViewById(R.id.txtDescription);
@@ -117,6 +130,12 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
         txtCustomerName.setText(customer.getFirstname());
        // txtDescription.setText(customer.);
        String txtDesc =  txtDescription.getText().toString().replace("XXXX",customer.getFirstname()).replace("YYYY",Math.round(distance)+"");
+       String txtTxt = txtText.getText().toString().replace("his", customer.getFirstname());
+
+       txtText.setText(txtTxt);
+
+
+       // String msg = String.format("A customer needs your help, %dkm away from your location", Math.round(distance));
 
         txtDescription.setText(txtDesc);
         cancel_action.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +148,8 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
 
-                listener.onReturnValue(false);
+                rejectRequestSocketConnection(userLat,userLong,mString);
+
                 dialog.dismiss();
 
             }
@@ -138,7 +158,12 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               listener.onReturnValue(true);
+
+
+
+                acceptRequestSocketConnection(userLat,userLong,mString);
+
+
                 dialog.dismiss();
 
             }
@@ -156,6 +181,90 @@ public class AcceptAndDeclineFragment extends BottomSheetDialogFragment {
         return dialog;
 
     }
+
+
+
+
+    private void acceptRequestSocketConnection(double lat,double longitude,final String customer) {
+        try {
+
+
+
+            final Users mechanic = Util.GetUserObjectFromJson(getActivity());
+            mechanic.setLatitude(lat);
+            mechanic.setLongitude(longitude);
+
+            OkHttpClient okHttpClient = ConnectionController.client;
+            IO.setDefaultOkHttpWebSocketFactory(okHttpClient);
+            IO.setDefaultOkHttpCallFactory(okHttpClient);
+            IO.Options opts = new IO.Options();
+            opts.callFactory = okHttpClient;
+            opts.webSocketFactory = okHttpClient;
+            socket = IO.socket(Constants.Base_URL, opts);
+            socket.connect();
+//            socket.emit(Constants.MECHANIC_ACCEPT_JOB,gson.toJson(mechanic),customer);
+            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+
+
+                }
+            }).on(Constants.MECHANIC_ACCEPT_JOB, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+
+                    JSONObject jsonMechanic = (JSONObject) args[0];
+                    String responseString  = jsonMechanic.toString();
+
+                    System.out.println("-responseString-" + responseString);
+                }
+            });
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    listener.onReturnValue(true);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.toString());
+        }
+    }
+
+
+    private void rejectRequestSocketConnection(double lat,double longitude,final String customer) {
+        try {
+
+            Users mechanic = Util.GetUserObjectFromJson(getActivity());
+            mechanic.setLatitude(lat);
+            mechanic.setLongitude(longitude);
+
+            OkHttpClient okHttpClient = ConnectionController.client;
+            IO.setDefaultOkHttpWebSocketFactory(okHttpClient);
+            IO.setDefaultOkHttpCallFactory(okHttpClient);
+            IO.Options opts = new IO.Options();
+            opts.callFactory = okHttpClient;
+            opts.webSocketFactory = okHttpClient;
+            socket = IO.socket(Constants.Base_URL, opts);
+            socket.connect();
+            System.out.println("before - Rejecting");
+            socket.emit(Constants.MECHANIC_REJECT_JOB, gson.toJson(mechanic),customer);
+            System.out.println("after - Rejecting");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    listener.onReturnValue(false);
+                }
+            });
+
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void counter(long min,final Dialog dialog) {
         CountDownTimer timer = new CountDownTimer(min, 1000) {

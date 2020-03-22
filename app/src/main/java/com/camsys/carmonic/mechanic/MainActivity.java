@@ -2,18 +2,13 @@ package com.camsys.carmonic.mechanic;
 
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.telephony.gsm.GsmCellLocation;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,32 +27,23 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.camsys.carmonic.mechanic.Account.AccountFragment;
-import com.camsys.carmonic.mechanic.Help.HelpFragment;
-import com.camsys.carmonic.mechanic.History.HistoryFragment;
+import com.camsys.carmonic.mechanic.History.HistoryActivity;
 import com.camsys.carmonic.mechanic.MapView.MapViewFragment;
-import com.camsys.carmonic.mechanic.Model.HistoryItem;
 import com.camsys.carmonic.mechanic.Model.Users;
-import com.camsys.carmonic.mechanic.Profile.ProfileFragment;
+import com.camsys.carmonic.mechanic.Profile.ProfileActivity;
 import com.camsys.carmonic.mechanic.Service.TestService;
 import com.camsys.carmonic.mechanic.Utilities.Constants;
 import com.camsys.carmonic.mechanic.Utilities.SharedData;
 import com.camsys.carmonic.mechanic.Utilities.Util;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-implements NavigationView.OnNavigationItemSelectedListener, HistoryFragment.OnListFragmentInteractionListener,
-                            ProfileFragment.OnFragmentInteractionListener,AccountFragment.OnFragmentInteractionListener,
-                            HelpFragment.OnFragmentInteractionListener{
+implements NavigationView.OnNavigationItemSelectedListener
+                           {
 
     Gson gson  = null;
     SharedData sharedData =  null;
@@ -134,11 +120,12 @@ implements NavigationView.OnNavigationItemSelectedListener, HistoryFragment.OnLi
         navigationView.setItemTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorYellow)));
         navigationView.setNavigationItemSelectedListener(this);
 
-        View headerView = navigationView.inflateHeaderView(R.layout.nav_header);
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_2    );
         ImageView imageView = (ImageView)headerView.findViewById(R.id.user_picture);
         TextView txtFName = (TextView) headerView.findViewById(R.id.fName);
         TextView txtUsername = (TextView) headerView.findViewById(R.id.username);
-        final Switch indicator =  (Switch)headerView.findViewById(R.id.switchAB) ;
+//        final Switch indicator =  (Switch)headerView.findViewById(R.id.switchAB) ;
+//        indicator.setVisibility(View.INVISIBLE);
 //        final TextView txtFName= (TextView)navigationView.findViewById(R.id.fName);
 //        final TextView txtUsername= (TextView)navigationView.findViewById(R.id.username);
 
@@ -146,32 +133,32 @@ implements NavigationView.OnNavigationItemSelectedListener, HistoryFragment.OnLi
         txtFName.setText(user.getLastname());
          txtUsername.setText(user.getEmail());
 
-        indicator.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-
-                    if(Util.checkConnectivity(getApplicationContext())) {
-                        indicator.setText("Online");
-                        indicator.setTextColor(getResources().getColor(R.color.colorYellow));
-                        startService(new Intent(getApplicationContext(), TestService.class));
-
-                    }else{
-                        Toast.makeText(getApplicationContext(), "No internet connection available.", Toast.LENGTH_SHORT).show();
-                    }
-                }else{
-                    if(Util.checkConnectivity(getApplicationContext())) {
-
-                        indicator.setText("Offline");
-                        indicator.setTextColor(getResources().getColor(R.color.colorWhite));
-                        stopService(new Intent(getApplicationContext(), TestService.class));
-
-                    }else{
-                        Toast.makeText(getApplicationContext(), "No internet connection available.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
+//        indicator.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if(isChecked) {
+//
+//                    if(Util.checkConnectivity(getApplicationContext())) {
+//                        indicator.setText("Online");
+//                        indicator.setTextColor(getResources().getColor(R.color.colorYellow));
+//                        startService(new Intent(getApplicationContext(), TestService.class));
+//
+//                    }else{
+//                        Toast.makeText(getApplicationContext(), "No internet connection available.", Toast.LENGTH_SHORT).show();
+//                    }
+//                }else{
+//                    if(Util.checkConnectivity(getApplicationContext())) {
+//
+//                        indicator.setText("Offline");
+//                        indicator.setTextColor(getResources().getColor(R.color.colorWhite));
+//                        stopService(new Intent(getApplicationContext(), TestService.class));
+//
+//                    }else{
+//                        Toast.makeText(getApplicationContext(), "No internet connection available.", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//        });
 
 System.out.println("===getACtion====" + getIntent().getAction());
 
@@ -304,33 +291,36 @@ System.out.println("===getACtion====" + getIntent().getAction());
 
     public void displayDrawerItem(int menuItemId) {
         Fragment fragment = null;
+        Intent intent =   null;
         String title = "";
         //boolean hasFab = false;
         boolean noTitle = false;
         switch (menuItemId) {
-            case R.id.nav_history: {
-                  fragment = HistoryFragment.newInstance();
-                  title="Dashboard";
-                  break;
-              }
+            case R.id.nav_history:
+                  intent = new Intent (MainActivity.this, HistoryActivity.class);
+                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                 break;
 
-            case R.id.nav_account: {
-                fragment = AccountFragment.newInstance();
-                title="Account";
+            case R.id.nav_profle:
+                 intent = new Intent (MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right);
                 break;
-            }
 
-            case R.id.nav_profle: {
-                fragment = ProfileFragment.newInstance();
-                title="Account";
-                break;
-            }
+//            case R.id.nav_account: {
+////                fragment = AccountFragment.newInstance();
+////                title="Account";
+//                break;
+//            }
+//
 
-            case R.id.nav_help: {
-                fragment = HelpFragment.newInstance();
-                title="Account";
-                break;
-            }
+//
+//            case R.id.nav_help: {
+////                fragment = HelpFragment.newInstance();
+////                title="Account";
+//                break;
+//            }
 
             default: {
             // fragment = new MapFragment();
@@ -383,22 +373,13 @@ System.out.println("===getACtion====" + getIntent().getAction());
         drawer.closeDrawer(GravityCompat.START);
     }
 
-    @Override
-    public void onListFragmentInteraction(HistoryItem item) {
 
-    }
 
-    @Override
-    public void onItemClick(View view, int position) {
 
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 
     protected OnBackPressedListener onBackPressedListener;
+
+
 
     public interface OnBackPressedListener {
         void doBack();
